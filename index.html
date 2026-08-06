@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#F6F4F0" />
+
+    <title>Northlight Dental — General and cosmetic dentistry in the Pearl District, Portland</title>
+    <meta
+      name="description"
+      content="General and cosmetic dentistry in the Pearl District, Portland. Digital scanning instead of impression trays, same-day crowns, and same-day emergency slots. Book online or call (503) 555-0142."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Northlight Dental — Pearl District, Portland" />
+    <meta
+      property="og:description"
+      content="Scanned, not moulded. Most crowns are milled and fitted in a single visit. Same-day emergency slots held daily until 3pm."
+    />
+    <!-- TODO: point at the generated master interior once it exists. -->
+    <meta property="og:image" content="/assets/images/interior-master.webp" />
+
+    <link rel="canonical" href="https://northlightdental.example/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!--
+      LCP: the hero is the master interior, so it is preloaded and fetched at high
+      priority. Everything else on the page is lazy-loaded.
+      This preload is only correct while the hero asset is a real file — it is
+      commented out until the asset ships, so the build does not warn about a
+      preload that never resolves.
+
+    <link
+      rel="preload"
+      as="image"
+      href="/assets/images/interior-master.webp"
+      fetchpriority="high"
+    />
+    -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <noscript>
+      <div style="padding: 2rem; font-family: system-ui, sans-serif; line-height: 1.6">
+        <h1 style="font-size: 1.5rem">Northlight Dental</h1>
+        <p>General and cosmetic dentistry, 1420 NW Marshall Street, Suite 200, Portland, OR 97209.</p>
+        <p>
+          To book an appointment, call
+          <a href="tel:+15035550142"><strong>(503) 555-0142</strong></a
+          >. Same-day emergency slots are held daily until 3pm.
+        </p>
+        <p>
+          Open Monday to Thursday 8am–5pm, Wednesday until 7pm, Friday 8am–3pm, Saturday
+          9am–1pm.
+        </p>
+      </div>
+    </noscript>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
