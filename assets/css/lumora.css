@@ -9126,3 +9126,34 @@ footer{border-top:3px solid var(--primitive-color--primary-500,#24a3b1);}
 
 /* Safety: reveal/portrait/blog images must never stay blurred (no leftover IX2 blur) */
 .team_image,.blog-item_image,.our-story_image,.about-hero_image,.home-value_image{filter:none !important;-webkit-filter:none !important;}
+
+/* --- Dental Care Centre logo --- */
+/* The lockup is 918x390 (2.354:1). The previous mark was 4.6:1, so the anchor's
+   140px max-width alone would render this one ~60px tall. Heights are therefore
+   explicit, and the anchor cap is lifted. */
+.navbar_logo { max-width: none; }
+.logo_image { height: 44px; width: auto; object-fit: contain; }
+.footer_brand .brand_logo { height: 52px; width: auto; object-fit: contain; }
+
+/* The full lockup cannot survive small sizes: at 36px its wordmark renders at a 5.7px
+   cap height and the rectangle stroke at 0.48px, i.e. sub-pixel. Under 768px we swap to
+   the compact lockup, which drops the rectangle and re-proportions the wordmark so it
+   reaches a 13.7px cap height at the same 36px box. */
+@media screen and (max-width: 767px) {
+  .logo_image {
+    height: 36px;
+    content: url("../img/logo-dcc-compact-white.svg");
+  }
+  .footer_brand .brand_logo {
+    height: 40px;
+    content: url("../img/logo-dcc-compact-white.svg");
+  }
+}
+
+@media print {
+  /* The white lockup is invisible on paper. Swap the image content itself — a
+     background-image would not do, because browsers omit background graphics from
+     print by default. */
+  .logo_image,
+  .footer_brand .brand_logo { content: url("../img/logo-dcc-navy.png"); }
+}

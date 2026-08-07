@@ -9,7 +9,6 @@
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="assets/img/favicon.svg" rel="shortcut icon" type="image/svg+xml"/>
-    <link href="assets/img/webclip.png" rel="apple-touch-icon"/>
     <style>
         body{margin:0;background:#fafafa;color:#011f23;font-family:Sora,'Helvetica Neue',Arial,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased;}
         .legal-nav{display:flex;align-items:center;justify-content:space-between;padding:24px 6vw;border-bottom:1px solid #e2e2e2;}
@@ -21,11 +20,21 @@
         .legal-wrap p,.legal-wrap li{color:#3a4a4d;font-size:16px;}
         .legal-wrap a{color:#24a3b1;}
         .legal-foot{text-align:center;padding:40px 24px;border-top:1px solid #e2e2e2;color:#758696;font-size:14px;}
-    </style>
-</head>
+    .legal-nav img{height:36px;width:auto;}
+@media screen and (max-width:767px){.legal-nav img{height:30px;content:url("assets/img/logo-dcc-compact-navy.svg");}}
+@media print{.legal-nav img{content:url("assets/img/logo-dcc-navy.png");}}
+</style>
+    <!-- Dental Care Centre icons -->
+    <link rel="icon" href="assets/img/favicon-dcc.svg" type="image/svg+xml"/>
+    <link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png"/>
+    <link rel="icon" href="assets/img/favicon-16.png" sizes="16x16" type="image/png"/>
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"/>
+    <link rel="manifest" href="site.webmanifest"/>
+    <meta name="theme-color" content="#10107A"/>
+  </head>
 <body>
     <div class="legal-nav">
-        <a href="index.html"><img src="assets/img/lumora-logo.svg" alt="Lumora Dental logo" height="30"/></a>
+        <a href="index.html"><img src="assets/img/logo-dcc-navy.svg" alt="Dental Care Centre" width="85" height="36"/></a>
         <a class="back" href="index.html">&larr; Back to home</a>
     </div>
     <main class="legal-wrap">

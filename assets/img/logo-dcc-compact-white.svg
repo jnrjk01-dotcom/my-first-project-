@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 403.8 100" width="404" height="100" fill="none" role="img" aria-label="Dental Care Centre">
+  <title>Dental Care Centre</title>
+  <g transform="scale(0.31056) translate(0 -67)">
+    <rect x="0" y="67" width="160" height="160" fill="#3389CC"/>
+    <rect x="185" y="222" width="167" height="167" fill="#3389CC"/>
+    <rect x="41" y="234" width="118" height="118" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+    <path d="M121 0C60 0 6 30 6 92C6 132 13 165 20 198C26 232 30 268 34 288C38 306 66 308 74 290C82 262 88 232 95 210C101 192 141 192 147 210C154 232 160 262 168 290C176 308 204 306 208 288C212 268 216 232 222 198C229 165 236 132 236 92C236 30 182 0 121 0Z" transform="translate(63 83)" fill="#FFFFFF"/>
+  </g>
+  <path d="M0 0H32C52 0 68 14 68 33V67C68 86 52 100 32 100H0V0ZM22 19V81H31C42 81 46 74 46 64V36C46 26 42 19 31 19H22Z" transform="translate(123.32 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 0H58V20H22V40H52V58H22V80H58V100H0V0Z" transform="translate(151.59 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 100V0H20L48 58V0H70V100H50L22 42V100H0Z" transform="translate(176.06 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 0H62V20H42V100H20V20H0V0Z" transform="translate(205.09 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 100L26 0H44L70 100H48L44 79H26L22 100H0ZM29.5 60H40.5L35 33L29.5 60Z" transform="translate(231.08 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 0H22V80H56V100H0V0Z" transform="translate(260.12 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M68 34C68 13 55 0 34 0C14 0 0 14 0 34V66C0 86 14 100 34 100C55 100 68 87 68 66H46C46 74 41 80 34 80C28 80 22 75 22 66V34C22 25 28 20 34 20C41 20 46 26 46 34H68Z" transform="translate(296.14 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 100L26 0H44L70 100H48L44 79H26L22 100H0ZM29.5 60H40.5L35 33L29.5 60Z" transform="translate(324.41 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 0H36C54 0 66 11 66 28C66 40 60 48 51 52L68 100H45L31 57H22V100H0V0ZM22 19V39H32C38 39 43 35 43 29C43 23 38 19 32 19H22Z" transform="translate(353.44 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+    <path d="M0 0H58V20H22V40H52V58H22V80H58V100H0V0Z" transform="translate(381.72 12) scale(0.38000)" fill="#FFFFFF" fill-rule="evenodd"/>
+  <path d="M68 34C68 13 55 0 34 0C14 0 0 14 0 34V66C0 86 14 100 34 100C55 100 68 87 68 66H46C46 74 41 80 34 80C28 80 22 75 22 66V34C22 25 28 20 34 20C41 20 46 26 46 34H68Z" transform="translate(262.32 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+    <path d="M0 0H58V20H22V40H52V58H22V80H58V100H0V0Z" transform="translate(287.61 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+    <path d="M0 100V0H20L48 58V0H70V100H50L22 42V100H0Z" transform="translate(309.51 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+    <path d="M0 0H62V20H42V100H20V20H0V0Z" transform="translate(335.48 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+    <path d="M0 0H36C54 0 66 11 66 28C66 40 60 48 51 52L68 100H45L31 57H22V100H0V0ZM22 19V39H32C38 39 43 35 43 29C43 23 38 19 32 19H22Z" transform="translate(358.74 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+    <path d="M0 0H58V20H22V40H52V58H22V80H58V100H0V0Z" transform="translate(384.04 58) scale(0.34000)" fill="#3389CC" fill-rule="evenodd"/>
+</svg>
