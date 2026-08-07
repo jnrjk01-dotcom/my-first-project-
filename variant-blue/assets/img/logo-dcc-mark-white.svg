@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-42.2 9.8 436.5 436.5" width="512" height="512" fill="none" role="img" aria-label="Dental Care Centre">
+  <title>Dental Care Centre</title>
+  <rect x="0" y="67" width="160" height="160" fill="#3389CC"/>
+  <rect x="185" y="222" width="167" height="167" fill="#3389CC"/>
+  <rect x="41" y="234" width="118" height="118" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+  <path d="M121 0C60 0 6 30 6 92C6 132 13 165 20 198C26 232 30 268 34 288C38 306 66 308 74 290C82 262 88 232 95 210C101 192 141 192 147 210C154 232 160 262 168 290C176 308 204 306 208 288C212 268 216 232 222 198C229 165 236 132 236 92C236 30 182 0 121 0Z" transform="translate(63 83)" fill="#FFFFFF"/>
+</svg>

@@ -253,6 +253,21 @@ for (const [name, svg] of Object.entries(files)) {
   console.log(`wrote assets/img/${name}  (${svg.length} bytes)`);
 }
 
+const MIRRORED = Object.keys(files);
+/* Both site trees have their own assets/img. Mirror every generated file into
+   variant-blue, or its pages 404 and the inline image guard silently swaps in a
+   gradient placeholder — which looks intentional and hides the mistake. */
+import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
+const MIRROR = join(IMG, '..', '..', 'variant-blue', 'assets', 'img');
+if (existsSync(join(IMG, '..', '..', 'variant-blue'))) {
+  mkdirSync(MIRROR, { recursive: true });
+  for (const name of MIRRORED) {
+    copyFileSync(join(IMG, name), join(MIRROR, name));
+  }
+  console.log(`\nmirrored ${MIRRORED.length} file(s) into variant-blue/assets/img/`);
+}
+
+
 console.log(`\nlockup viewBox: 0 0 ${W} ${H}  (ratio ${(W / H).toFixed(4)})`);
 console.log(`rect stroke: ${RECT_STROKE} (${(RECT.h / RECT_STROKE).toFixed(0)}:1 vs height)`);
 console.log(`DENTAL CARE width: ${wordWidth('DENTAL CARE', L1_SIZE).toFixed(1)}`);
