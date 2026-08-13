@@ -225,22 +225,7 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <div class="lead-form_card">
-                                        <div class="lead-form_head">
-                                            <div class="lead-form_title">Book a visit</div>
-                                            <div class="lead-form_sub">Get a callback within 10 minutes</div>
-                                        </div>
-                                        <form class="lead-form" onsubmit="return lumoraLead(event)">
-                                            <input class="lead-form_input" type="text" name="name" placeholder="Your name" required="">
-                                            <input class="lead-form_input" type="tel" name="phone" placeholder="Phone number" required="">
-                                            <button class="lead-form_btn" type="submit">Request a callback</button>
-                                            <div class="lead-form_note">No spam. A real person calls you back, fast.</div>
-                                        </form>
-                                        <div class="lead-form_success" style="display:none">
-                                            <div class="lead-form_title">Thanks! You're all set.</div>
-                                            <div class="lead-form_sub">Our team will call you within 10 minutes.</div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -1942,24 +1927,7 @@
 
 
     
-        <script>
-            function lumoraLead(e){
-                e.preventDefault();
-                var f=e.target;
-                var name=(f.querySelector('input[name="name"]').value||'').trim();
-                var phone=(f.querySelector('input[name="phone"]').value||'').trim();
-                if(!name||!phone){return false;}
-                var msg=encodeURIComponent("Hi Dental Care Centre, I'm "+name+". Please call me back at "+phone+" for a dental appointment.");
-                try{ window.open("https://wa.me/919307512816?text="+msg,"_blank"); }catch(_){}
-                var card=f.closest('.lead-form_card');
-                if(card){
-                    f.style.display='none';
-                    var head=card.querySelector('.lead-form_head'); if(head) head.style.display='none';
-                    var ok=card.querySelector('.lead-form_success'); if(ok) ok.style.display='block';
-                }
-                return false;
-            }
-        </script>
+        
 
     
         <script>
