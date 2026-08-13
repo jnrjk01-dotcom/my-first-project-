@@ -39,19 +39,31 @@ const HERO = '1344x752'; // matches the carousel box exactly
 
 const JOBS = [
   { src: 'p3.jpg', out: 'clinic-operatory.jpg', size: HERO, focal: 'center' },
-  { src: 'p4.jpg', out: 'clinic-dentist-child.jpg', size: HERO, focal: 'top' },
+  // retouch: eye-white correction, applied to the full-res source before cropping so
+  // there is only one JPEG encode at the end. See retouch-eyes.mjs for the method.
+  { src: 'p4.jpg', out: 'clinic-dentist-child.jpg', size: HERO, focal: 'top', retouch: 0.85 },
   { src: 'p2.jpg', out: 'clinic-treatment.jpg', size: HERO, focal: 'center' },
   // Banner keeps its own portrait shape; it is never cropped.
   { src: 'p1.jpg', out: 'clinic-banner.jpg', size: '1000x1500', focal: 'center' },
 ];
 
 const fit = join(ROOT, 'assets/brand/fit-photo.mjs');
+const retoucher = join(ROOT, 'assets/brand/retouch-eyes.mjs');
+
 for (const j of JOBS) {
-  const src = join(SRC, j.src);
+  let src = join(SRC, j.src);
   if (!existsSync(src)) {
     console.error(`missing source: ${src}`);
     process.exit(1);
   }
+
+  // Retouch the full-resolution source first, so the crop is the only lossy step.
+  if (j.retouch) {
+    const tmp = join(SRC, `.retouched-${j.src}`);
+    execFileSync('node', [retoucher, src, tmp, String(j.retouch)], { stdio: 'inherit' });
+    src = tmp;
+  }
+
   execFileSync(
     'node',
     [fit, src, join(ROOT, 'assets/img', j.out), j.size, j.focal, '0.82'],
@@ -154,9 +166,13 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
   s = s.slice(0, first) + carouselHtml + s.slice(end);
 
   // Insert the banner section immediately before the closing CTA.
+  let bannerInserted = false;
   if (!s.includes(BANNER_MARKER)) {
     const cta = s.indexOf('<section class="section_cta">');
-    if (cta !== -1) s = s.slice(0, cta) + bannerHtml + s.slice(cta);
+    if (cta !== -1) {
+      s = s.slice(0, cta) + bannerHtml + s.slice(cta);
+      bannerInserted = true;
+    }
   }
 
   const after = {
@@ -168,8 +184,10 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
   // The banner adds exactly one <section> and two <div>s (section-padding and
   // container-large); nothing else may move. Counted from bannerHtml itself so the
   // expectation cannot drift from the markup.
-  const addedDivs = (bannerHtml.match(/<div\b/g) || []).length;
-  const addedSections = (bannerHtml.match(/<section\b/g) || []).length;
+  // Only count the banner's markup when it was actually inserted this run; on a
+  // re-run it is already present and nothing is added.
+  const addedDivs = bannerInserted ? (bannerHtml.match(/<div\b/g) || []).length : 0;
+  const addedSections = bannerInserted ? (bannerHtml.match(/<section\b/g) || []).length : 0;
   const expected = { div: before.div + addedDivs, divClose: before.divClose + addedDivs,
                      section: before.section + addedSections, script: before.script };
   const drift = Object.keys(expected).filter((k) => after[k] !== expected[k]);
