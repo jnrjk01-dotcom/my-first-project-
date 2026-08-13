@@ -8814,14 +8814,13 @@ figure {
   }
 
   .hero-image_wrap {
-    background-image: url("../img/69f5e19b42acf37c98906a5c_home-hero-mobile-image.webp");
-    background-position: 100% 0;
-    background-repeat: no-repeat;
-    background-size: contain;
+    /* The rotating carousel now runs on phones too, so the old static
+       background image is no longer painted behind it. */
+    background-image: none;
   }
 
   .home-hero_image.hide-on-mobile {
-    display: none;
+    display: block;
   }
 
   .footer-bottom_right {
@@ -9156,4 +9155,18 @@ footer{border-top:3px solid var(--primitive-color--primary-500,#24a3b1);}
      print by default. */
   .logo_image,
   .footer_brand .brand_logo { content: url("../img/logo-dcc-navy.png"); }
+}
+
+/* --- outreach banner --- */
+/* The banner carries its own dense typography, so it is shown whole and uncropped.
+   Capped against the viewport so it never dominates the page on a tall screen. */
+.section_outreach { background: #f4f7fa; }
+.outreach_figure { margin: 0; display: flex; justify-content: center; }
+.outreach_image {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
 }
