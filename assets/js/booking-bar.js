@@ -24,10 +24,10 @@
     })();
 
   var cfg = {
-    // ⚠ Still the template's placeholder number. Swap before publishing.
-    phone: '+919307512816',
-    phoneDisplay: '+91 9307512816',
-    whatsapp: '919307512816', // international format, no +, no spaces
+    // Real clinic numbers. bookUrl below is still a placeholder Calendly link.
+    phone: '+263292263687',
+    phoneDisplay: '+263 29 226 3687',
+    whatsapp: '263778398111', // international format, no +, no spaces
     whatsappText: 'Hi Dental Care Centre, I would like to book an appointment.',
     bookUrl: 'https://calendly.com/shreyasrajsony11',
     label: 'Give us a call to schedule an appointment',
