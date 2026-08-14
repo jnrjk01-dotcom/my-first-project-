@@ -9181,3 +9181,84 @@ footer{border-top:3px solid var(--primitive-color--primary-500,#2f80ff);}
   border-radius: 14px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
 }
+
+/* --- nav: services dropdown + contact buttons --- */
+/* Services mega-menu. The template's dropdown was a single narrow column; four
+   grouped columns need an explicit grid and a wider panel. */
+.navbar-dropdown_wrapper.is-services {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(168px, 1fr));
+  gap: 4px 30px;
+  padding: 24px 28px;
+  min-width: 780px;
+  align-items: start;
+}
+.svc-group_title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0.62;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+.navbar-dropdown_wrapper.is-services .navbar-dropdown_link { padding-block: 6px; }
+
+/* Header contact pair. */
+.navbar-contact { display: flex; align-items: center; gap: 10px; margin-right: 12px; }
+.navbar-wa {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #e7f6ec; color: #1faf54;
+  transition: background-color .2s, transform .2s;
+}
+.navbar-wa:hover { background: #d3efdd; transform: translateY(-1px); }
+.navbar-tel {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 18px 6px 6px; border-radius: 999px;
+  background: #0d2526; color: #fff; text-decoration: none;
+  font-weight: 600; font-size: 15px; white-space: nowrap;
+  transition: background-color .2s;
+}
+.navbar-tel:hover { background: #133537; }
+.navbar-tel_icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: #fff; color: #0d2526;
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+}
+.navbar-wa:focus-visible, .navbar-tel:focus-visible { outline: 3px solid #3389CC; outline-offset: 2px; }
+
+/* The Webflow nav collapses at 991px; the mega-menu becomes a single stacked list. */
+@media screen and (max-width: 991px) {
+  .navbar-dropdown_wrapper.is-services {
+    grid-template-columns: 1fr; min-width: 0; padding: 14px 16px; gap: 2px;
+  }
+  .svc-group_title { margin-top: 12px; }
+}
+
+/* Below 600px the number itself is dropped: the icon still calls, and the booking
+   bar at the foot of the page carries the number in full. */
+@media screen and (max-width: 600px) {
+  .navbar-tel_num { display: none; }
+  .navbar-tel { padding: 6px; }
+  .navbar-contact { gap: 8px; margin-right: 8px; }
+  .navbar-wa { width: 40px; height: 40px; }
+}
+
+/* The header carries more now (WhatsApp + call pill), which squeezed the links enough
+   that "About Us" and "Get Appointment" wrapped onto two lines. */
+.navbar_link, .navbar-dropdown_toggle { white-space: nowrap; }
+.navbar_button .button_text { white-space: nowrap; }
+.navbar_container { grid-column-gap: 24px; }
+
+/* Keep the panel from running to the viewport edge on narrower desktops. */
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .navbar-dropdown_wrapper.is-services {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+    min-width: 420px;
+  }
+}
+
+/* When the mobile menu is open it fills the screen, and the fixed booking bar sat on
+   top of its last items. Webflow marks the open state on the nav button. */
+body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
