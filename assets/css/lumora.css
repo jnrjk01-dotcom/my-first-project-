@@ -9251,3 +9251,102 @@ footer{border-top:3px solid var(--primitive-color--primary-500,#24a3b1);}
 /* When the mobile menu is open it fills the screen, and the fixed booking bar sat on
    top of its last items. Webflow marks the open state on the nav button. */
 body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
+
+
+
+/* --- services: native snap carousel --- */
+/* The pinned horizontal rig could not reach cards 3 and 4 and left the buttons
+   outside the viewport. Native scroll-snap replaces it; the markup is unchanged. */
+.service_sticky-trigger { height: auto !important; }
+.service_sticky-camera { position: static !important; top: auto !important; }
+.scroll-mobile_trigger { height: auto !important; padding-bottom: 0 !important; }
+.scroll-mobile_camera { position: static !important; top: auto !important; }
+
+.service_wrap { display: block !important; container-type: normal !important; }
+/* Beats the inline transform Webflow's interaction writes onto the track. */
+.scroll_track { transform: none !important; display: block !important; }
+.scroll_list { margin-right: 0 !important; display: block !important; }
+.collection-list-wrapper { width: 100%; }
+
+.service_list {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 24px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  padding: 4px 4px 20px;
+  /* Cards take their natural height. Stretching them all to the tallest (Restorative,
+     with eight treatments) left the shorter cards with a large empty band below their
+     content. */
+  align-items: flex-start;
+  -webkit-overflow-scrolling: touch;
+}
+.service_item-wrap {
+  flex: 0 0 auto !important;
+  width: min(520px, 84vw) !important;
+  max-width: none !important;
+  height: auto !important;
+  scroll-snap-align: start;
+}
+/* The showcase block carries a hardcoded min-height/height of 446px from the original
+   wide-card design, wrapping an image only 128px tall. In the narrower rail card that
+   is ~320px of dead space below the content, which is what pushed the buttons out of
+   reach in the first place. */
+.service-item_showcase { min-height: 0 !important; height: auto !important; }
+
+.service_item {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 18px;
+}
+
+/* Treatments listed inside each card. */
+.service-item_list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 7px 18px;
+  grid-template-columns: 1fr 1fr;
+}
+.service-item_list li {
+  position: relative;
+  padding-left: 16px;
+  font-size: 15px;
+  line-height: 1.35;
+}
+.service-item_list li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0.55em;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+/* Arrows and hint sit under the rail. */
+.service-rail_controls {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 6px;
+}
+.service-rail_btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid rgba(1,31,35,.22); background: transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; color: inherit;
+  transition: background-color .2s, border-color .2s, opacity .2s;
+}
+.service-rail_btn:hover:not(:disabled) { background: rgba(1,31,35,.06); border-color: rgba(1,31,35,.5); }
+.service-rail_btn:disabled { opacity: .3; cursor: default; }
+.service-rail_btn:focus-visible { outline: 3px solid #3389CC; outline-offset: 2px; }
+.service-rail_hint { font-size: 13px; opacity: .6; }
+
+@media screen and (max-width: 767px) {
+  .service_item-wrap { width: 86vw !important; }
+  .service-item_list { grid-template-columns: 1fr; }
+  .service-rail_hint { display: none; }
+}
