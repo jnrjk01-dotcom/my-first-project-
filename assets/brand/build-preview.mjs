@@ -35,6 +35,9 @@ import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OUT = process.argv[2] || join(ROOT, 'preview-home.html');
+/* Which page to bundle. Only root-tree pages: the paths inside are resolved relative
+   to ROOT, so a variant-blue page would look for its assets in the wrong tree. */
+const SRC = process.env.PREVIEW_PAGE || 'index.html';
 
 const MIME = {
   jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
@@ -55,7 +58,7 @@ function dataUri(rel) {
   return uri;
 }
 
-let html = readFileSync(join(ROOT, 'index.html'), 'utf8');
+let html = readFileSync(join(ROOT, SRC), 'utf8');
 
 /* The site loads Sora through Google's WebFont loader, which the CSP blocks outright —
    leaving the preview in fallback faces and misrepresenting the design. An optional
@@ -150,7 +153,10 @@ const assetJs =
 
 css = css.replace(/<\/(style)/gi, '<\\/$1');
 
-const title = 'Dental Care Centre';
+/* Distinct per page: the previews sit side by side in the artifact gallery, where a
+   shared title would make them indistinguishable. */
+const TITLES = { 'index.html': 'Dental Care Centre', 'service.html': 'Dental Care Centre Services' };
+const title = TITLES[SRC] || 'Dental Care Centre';
 
 const out = `<title>${title}</title>
 <style>
