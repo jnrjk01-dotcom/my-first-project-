@@ -9350,3 +9350,37 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   .service-item_list { grid-template-columns: 1fr; }
   .service-rail_hint { display: none; }
 }
+
+/* --- services: photo slot --- */
+/* Reserved area for each service card's photograph. Fixed 16:10 so dropping an image
+   in causes no layout shift, and so the four cards stay visually consistent. */
+.service-item_photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(1, 31, 35, 0.045);
+  border: 1px dashed rgba(1, 31, 35, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.service-item_photo-label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.35;
+}
+/* Once a photo is added it fills the slot and the placeholder styling drops away. */
+.service-item_photo:has(img) {
+  background: none;
+  border: 0;
+}
+.service-item_photo:has(img) .service-item_photo-label { display: none; }
+.service-item_photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
