@@ -1,19 +1,20 @@
 /**
- * Treatment switching for the services page.
+ * Service group switching.
  *
- * The panels are real elements with real ids and the sidebar entries are ordinary
- * anchors, so the stylesheet can switch between them with :target and the page works
- * with this file blocked. It cannot do the job on its own, though: Webflow's in-page
- * anchor module intercepts clicks on same-page links, calls preventDefault and animates
- * a scroll, so the fragment never changes and :target never fires. This listens in the
- * capture phase — ahead of that delegated handler — and takes over.
+ * The panels are real elements with real ids and the buttons are ordinary anchors, so
+ * the stylesheet can switch between them with :target and the page works with this file
+ * blocked. It cannot do the job alone, though: Webflow's in-page anchor module
+ * intercepts clicks on same-page links, calls preventDefault and animates a scroll, so
+ * the fragment never changes and :target never fires. This listens in the capture phase,
+ * ahead of that delegated handler, and takes over.
  *
- * With the script running the page also stays where it is when you switch on a wide
- * screen: the list is beside the content, so scrolling would only move it away.
+ * It also resolves the per-treatment deep links published in the Services dropdown
+ * (service.html#root-canal) to the group that contains them.
  */
 (function () {
   'use strict';
-  var DEFAULT = "consultation-examination";
+  var DEFAULT = "orthodontic-treatments";
+  var IN_GROUP = {"braces-orthodontics":"orthodontic-treatments","implants-treatment":"implants","veneers":"cosmetic-dentistry","teeth-whitening":"cosmetic-dentistry","crowns":"crowns-bridges-dentures","dental-bridges":"crowns-bridges-dentures","dentures":"crowns-bridges-dentures","filling":"restorative-treatments","root-canal":"restorative-treatments","normal-extraction":"oral-surgery","surgical-extraction":"oral-surgery","consultation-examination":"preventive-dentistry","scaling-and-polishing":"preventive-dentistry"};
 
   function init() {
     var nav = document.querySelector('.svcpage_nav');
@@ -23,27 +24,28 @@
     pane.classList.add('is-scripted');
 
     var links = [].slice.call(nav.querySelectorAll('.svcpage_nav-link'));
+    var panels = [].slice.call(pane.querySelectorAll('.svcpage_panel'));
 
-    function known(slug) {
+    /** A fragment may name a group or a single treatment inside one. */
+    function groupFor(slug) {
       for (var i = 0; i < links.length; i++) {
-        if (links[i].dataset.svc === slug) return true;
+        if (links[i].dataset.svc === slug) return slug;
       }
-      return false;
+      return IN_GROUP[slug] || null;
     }
 
     function show(slug) {
-      if (!known(slug)) slug = DEFAULT;
-      var panels = pane.querySelectorAll('.svcpage_panel');
+      var group = groupFor(slug) || DEFAULT;
       for (var i = 0; i < panels.length; i++) {
-        panels[i].classList.toggle('is-shown', panels[i].id === slug);
+        panels[i].classList.toggle('is-shown', panels[i].id === group);
       }
       for (var j = 0; j < links.length; j++) {
-        var on = links[j].dataset.svc === slug;
+        var on = links[j].dataset.svc === group;
         links[j].classList.toggle('is-current', on);
         if (on) links[j].setAttribute('aria-current', 'true');
         else links[j].removeAttribute('aria-current');
       }
-      return slug;
+      return group;
     }
 
     function fromHash() {
@@ -60,11 +62,11 @@
         e.preventDefault();
         e.stopPropagation();
 
-        var slug = show(link.dataset.svc);
+        var group = show(link.dataset.svc);
         try {
-          history.pushState(null, '', '#' + slug);
+          history.pushState(null, '', '#' + group);
         } catch (err) {
-          location.hash = slug;
+          location.hash = group;
         }
 
         // Stacked under 992px the list sits above the content, so the new panel would
@@ -80,16 +82,20 @@
     window.addEventListener('hashchange', fromHash);
     window.addEventListener('popstate', fromHash);
 
-    fromHash();
-    // Arriving on a deep link: the browser could not scroll to a hidden panel, so put
-    // the layout itself in view instead.
-    if (location.hash && known(location.hash.replace(/^#/, ''))) {
-      var layout = document.querySelector('.svcpage_layout');
-      if (layout) {
-        requestAnimationFrame(function () {
-          layout.scrollIntoView({ block: 'start' });
-        });
-      }
+    var slug = (location.hash || '').replace(/^#/, '');
+    show(slug);
+
+    // Arriving on a deep link: the browser could not scroll to a panel that was hidden
+    // when it tried, so place the view now that the right one is open. A link naming a
+    // treatment lands on that treatment; a link naming a group lands on the group.
+    if (slug && groupFor(slug)) {
+      requestAnimationFrame(function () {
+        var el = document.getElementById(slug);
+        var target = el && el.classList.contains('svcpage_treatment')
+          ? el
+          : document.querySelector('.svcpage_layout');
+        if (target) target.scrollIntoView({ block: 'start' });
+      });
     }
   }
 

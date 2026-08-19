@@ -9386,180 +9386,197 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
 }
 
 /* --- services page: sidebar + panel --- */
-/* Two panes: every treatment listed on the left, the selected one shown on the right.
-   Selection is done with :target, so the page works without JavaScript and each
-   treatment has its own shareable URL.
+/* The services section is the one light area of this page. Everywhere else the site
+   sits on the deep brand colour, but this section carries long descriptive copy and a
+   boxed directory, both of which read better on a light ground.
 
-   COLOUR NOTE: this section's background is the deep brand colour (#022f34 teal,
-   #0b2a55 blue), so everything here is built from white alphas rather than the
-   dark tints used elsewhere in the sheet, and every value below was measured against
-   those two backgrounds. In particular the selected item and the call button are
-   accent-filled with primary-900 text (5.6:1 teal, 4.8:1 blue) — white on the accent
-   would be 3.0:1 and 3.7:1, which fails at this text size. */
+   Tokens are derived from the brand colour with color-mix so the teal tree and the blue
+   tree each tint their own neutrals; the plain values before each @supports block are
+   what a browser without color-mix falls back to. */
+.section_service.is-service-showcase {
+  --svc-ground: #f4f6f8;
+  --svc-card: #ffffff;
+  --svc-ink: var(--primitive-color--primary-900);
+  --svc-ink-soft: #55636b;
+  --svc-line: rgba(1, 31, 35, .1);
+  --svc-line-strong: rgba(1, 31, 35, .16);
+  background-color: var(--svc-ground);
+}
+@supports (color: color-mix(in srgb, red 50%, white)) {
+  .section_service.is-service-showcase {
+    --svc-ground: color-mix(in srgb, var(--primitive-color--primary-500) 5%, #f5f7f9);
+    --svc-ink-soft: color-mix(in srgb, var(--primitive-color--primary-900) 68%, #ffffff);
+    --svc-line: color-mix(in srgb, var(--primitive-color--primary-900) 11%, transparent);
+    --svc-line-strong: color-mix(in srgb, var(--primitive-color--primary-900) 18%, transparent);
+  }
+}
+/* The section heading was written for the dark ground it used to sit on. */
+.section_service.is-service-showcase .service_header h2,
+.section_service.is-service-showcase .section_tag { color: var(--svc-ink); }
+.section_service.is-service-showcase .section_tag {
+  background-color: var(--svc-card);
+  border: 1px solid var(--svc-line);
+}
+/* The accent clears 3:1 on this ground, which is the bar for large text; at 56px the
+   heading qualifies. It is not used for anything smaller here. */
+.section_service.is-service-showcase .text-highlighted {
+  color: var(--primitive-color--primary-600);
+}
+
 .svcpage_layout {
   display: grid;
-  grid-template-columns: 288px minmax(0, 1fr);
-  gap: 56px;
+  grid-template-columns: 316px minmax(0, 1fr);
+  gap: 44px;
   align-items: start;
 }
 
+/* ── The "All services" box ─────────────────────────────────────────────── */
 .svcpage_nav {
   position: sticky;
-  top: 112px;
-  max-height: calc(100vh - 144px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-right: 4px;
+  top: 108px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #eceff1;
+  box-shadow: 0 1px 2px rgba(1, 31, 35, .05), 0 12px 30px -18px rgba(1, 31, 35, .35);
+}
+@supports (color: color-mix(in srgb, red 50%, white)) {
+  .svcpage_nav { background: color-mix(in srgb, var(--svc-ink) 7%, var(--svc-card)); }
 }
 .svcpage_nav-title {
+  margin: 0;
+  padding: 20px 24px;
+  background: var(--primitive-color--primary-900);
+  color: #fff;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.svcpage_nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Seven groups fit a tall viewport; on a short one the box scrolls rather than
+     running off the bottom of a sticky element. */
+  max-height: calc(100vh - 220px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.svcpage_nav-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 18px;
-  font-size: 13px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 8px;
+  background: var(--svc-card);
+  border: 1px solid var(--svc-line);
+  color: var(--svc-ink);
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .72);
-}
-/* The accent appears as a mark rather than as text: as a colour it clears the 3:1
-   bar for a graphic on both backgrounds, but not the 4.5:1 bar for label text. */
-.svcpage_nav-title::before,
-.svcpage_eyebrow::before {
-  content: "";
-  flex: 0 0 auto;
-  width: 18px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--primitive-color--primary-500);
-}
-.svcpage_nav-group + .svcpage_nav-group { margin-top: 22px; }
-.svcpage_nav-group-title {
-  margin: 0 0 8px;
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .55);
-}
-.svcpage_nav-list { list-style: none; margin: 0; padding: 0; }
-.svcpage_nav-link {
-  display: block;
-  padding: 11px 16px;
-  border-radius: 10px;
-  font-size: 15.5px;
-  line-height: 1.3;
-  color: #fff;
+  line-height: 1.25;
   text-decoration: none;
-  border: 1px solid transparent;
   transition: background-color .18s, color .18s, border-color .18s;
 }
-.svcpage_nav-link:hover { background: rgba(255, 255, 255, .09); }
+.svcpage_nav-link .svcpage_chevron { flex: 0 0 auto; opacity: .55; }
+.svcpage_nav-link:hover {
+  border-color: var(--primitive-color--primary-500);
+}
+/* Accent fill with primary-900 text rather than white: measured on both trees, white on
+   the accent is 3.0:1 (teal) and 3.7:1 (blue), which fails at this text size. */
 .svcpage_nav-link.is-current,
 .svcpage_nav-link[aria-current="true"] {
   background: var(--primitive-color--primary-500);
   border-color: var(--primitive-color--primary-500);
   color: var(--primitive-color--primary-900);
-  font-weight: 600;
 }
-.svcpage_nav-link:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.svcpage_nav-link.is-current .svcpage_chevron { opacity: 1; }
+.svcpage_nav-link:focus-visible {
+  outline: 3px solid var(--primitive-color--primary-600);
+  outline-offset: 2px;
+}
 
-.svcpage_panel { display: none; scroll-margin-top: 124px; }
+/* ── Panels ─────────────────────────────────────────────────────────────── */
+.svcpage_panel { display: none; scroll-margin-top: 118px; }
 /* Scoped to :not(.is-scripted) rather than left to cascade order: the default-panel
-   rule below is specificity (0,6,0) and would otherwise keep the first panel visible
-   underneath whichever one the script has selected. */
-.svcpage_pane:not(.is-scripted) > .svcpage_panel:target { display: block; }
-.svcpage_pane:not(.is-scripted):not(:has(.svcpage_panel:target)) > .svcpage_panel:first-child {
+   rule is high specificity and would otherwise keep the first panel visible underneath
+   whichever one the script has selected. The :has() variant matches a treatment anchor
+   inside a panel, so the published per-treatment deep links still open their group. */
+.svcpage_pane:not(.is-scripted) > .svcpage_panel:target,
+.svcpage_pane:not(.is-scripted) > .svcpage_panel:has(:target) { display: block; }
+.svcpage_pane:not(.is-scripted):not(:has(:target)) > .svcpage_panel:first-child {
   display: block;
 }
-
-/* Once the script is running it takes over the switching, because Webflow's own
-   in-page-anchor module intercepts clicks on same-page links, calls preventDefault and
-   animates a scroll, so the fragment never changes and :target never fires. The rules
-   above are what the page does when the script does not run. */
+/* With the script running it owns the switching, because Webflow's in-page anchor
+   module intercepts clicks on same-page links and animates a scroll instead of letting
+   the fragment change, so :target never fires on a click. */
 .svcpage_pane.is-scripted > .svcpage_panel { display: none; }
 .svcpage_pane.is-scripted > .svcpage_panel.is-shown { display: block; }
 
 .svcpage_media {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 34px;
+  gap: 18px;
+  margin-bottom: 26px;
 }
-/* The shared photo-slot styling is tuned for the light home page cards; on this dark
-   section its dark tint and dashed rule are invisible. */
-.svcpage_media .service-item_photo {
-  background: rgba(255, 255, 255, .05);
-  border-color: rgba(255, 255, 255, .22);
-}
-.svcpage_media .service-item_photo-label { color: #fff; opacity: .5; }
-
-.svcpage_eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 10px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .72);
-}
-.svcpage_title { margin: 0 0 18px; color: #fff; }
+/* The shared slot label is set at 0.35 opacity for the home page cards, which on this
+   ground measures 1.2:1 and reads as an empty box rather than a reserved one. */
+.svcpage_media .service-item_photo-label { color: var(--svc-ink-soft); opacity: 1; }
+.svcpage_title { margin: 0 0 16px; color: var(--svc-ink); font-size: 44px; }
 .svcpage_lead {
-  font-size: 20px;
+  margin: 0 0 8px;
+  max-width: 62ch;
+  font-size: 19px;
   line-height: 1.55;
-  margin: 0 0 22px;
-  max-width: 60ch;
-  color: #fff;
+  color: var(--svc-ink-soft);
 }
 .svcpage_body {
-  margin: 0 0 16px;
-  max-width: 66ch;
-  color: rgba(255, 255, 255, .82);
+  margin: 16px 0 0;
+  max-width: 68ch;
+  color: var(--svc-ink-soft);
 }
 
-.svcpage_expect {
-  margin: 34px 0 0;
-  padding: 26px 28px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, .06);
-  border: 1px solid rgba(255, 255, 255, .1);
+.svcpage_treatment { margin-top: 34px; }
+.svcpage_treatment + .svcpage_treatment {
+  margin-top: 44px;
+  padding-top: 40px;
+  border-top: 1px solid var(--svc-line);
 }
-.svcpage_expect-title {
-  margin: 0 0 16px;
-  font-size: 13px;
+.svcpage_treatment-title { margin: 0 0 10px; color: var(--svc-ink); font-size: 28px; }
+.svcpage_treatment-lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 17.5px;
+  line-height: 1.5;
+  color: var(--svc-ink-soft);
+}
+
+/* ── Sub-treatment cards ────────────────────────────────────────────────── */
+.svcpage_cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 26px;
+}
+.svcpage_card {
+  padding: 22px 24px;
+  border-radius: 10px;
+  background: var(--svc-card);
+  border: 1px solid var(--svc-line);
+}
+.svcpage_card-title {
+  margin: 0 0 10px;
+  font-size: 17px;
   font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .72);
+  color: var(--primitive-color--primary-700);
 }
-.svcpage_list { list-style: none; margin: 0; padding: 0; display: grid; gap: 11px; }
-.svcpage_list li {
-  position: relative;
-  padding-left: 28px;
-  line-height: 1.45;
-  color: rgba(255, 255, 255, .9);
-}
-.svcpage_list li::before {
-  content: "";
-  position: absolute;
-  left: 0; top: .35em;
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: var(--primitive-color--primary-500);
-}
-.svcpage_list li::after {
-  content: "";
-  position: absolute;
-  left: 4.6px; top: .62em;
-  width: 7px; height: 3.5px;
-  border-left: 2px solid var(--primitive-color--primary-900);
-  border-bottom: 2px solid var(--primitive-color--primary-900);
-  transform: rotate(-45deg);
-}
+.svcpage_card-text { margin: 0; font-size: 15.5px; line-height: 1.55; color: var(--svc-ink-soft); }
 
-.svcpage_actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+/* ── Actions ────────────────────────────────────────────────────────────── */
+.svcpage_actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .svcpage_action {
   display: inline-flex;
   align-items: center;
@@ -9568,14 +9585,12 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   font-size: 15px;
   font-weight: 600;
   text-decoration: none;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, .38);
+  color: var(--svc-ink);
+  background: var(--svc-card);
+  border: 1px solid var(--svc-line-strong);
   transition: background-color .2s, color .2s, border-color .2s;
 }
-.svcpage_action:hover {
-  background: rgba(255, 255, 255, .12);
-  border-color: rgba(255, 255, 255, .8);
-}
+.svcpage_action:hover { border-color: var(--primitive-color--primary-500); }
 .svcpage_action.is-primary {
   background: var(--primitive-color--primary-500);
   border-color: var(--primitive-color--primary-500);
@@ -9585,44 +9600,34 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   background: var(--primitive-color--primary-600);
   border-color: var(--primitive-color--primary-600);
 }
-.svcpage_action:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.svcpage_action:focus-visible {
+  outline: 3px solid var(--primitive-color--primary-600);
+  outline-offset: 2px;
+}
 
 /* Also defined by booking-bar.js, but that script returns early once the bar has been
-   dismissed for the session — without this the hint text would become visible. */
+   dismissed for the session, and without this the hint text would become visible. */
 .dcc-sr {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
 
 @media screen and (max-width: 991px) {
-  .svcpage_layout { grid-template-columns: 1fr; gap: 34px; }
+  .svcpage_layout { grid-template-columns: 1fr; gap: 30px; }
   /* Sticky is only useful beside the content; stacked, it would cover it. */
-  .svcpage_nav { position: static; max-height: none; overflow: visible; }
-  /* flex-direction is stated because the sheet already sets ul { flex-direction: column }
-     further up, which would otherwise leave these as 13 full-width rows. */
-  .svcpage_nav-list {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  .svcpage_nav-list li { display: flex; }
-  /* Chips that wrap, not 13 full-width rows: stacked, a block list would push the
-     treatment itself most of a screen further down. */
-  .svcpage_nav-link {
-    display: inline-flex;
-    align-items: center;
-    border-color: rgba(255, 255, 255, .28);
-    border-radius: 999px;
-    padding: 9px 15px;
-    font-size: 14.5px;
-  }
-  .svcpage_panel { scroll-margin-top: 96px; }
+  .svcpage_nav { position: static; }
+  .svcpage_nav-list { max-height: none; overflow: visible; }
+  .svcpage_title { font-size: 36px; }
+  .svcpage_panel { scroll-margin-top: 92px; }
 }
 @media screen and (max-width: 767px) {
   .svcpage_media { grid-template-columns: 1fr; }
-  .svcpage_lead { font-size: 18px; }
-  .svcpage_expect { padding: 22px 20px; }
+  .svcpage_cards { grid-template-columns: 1fr; }
+  .svcpage_nav-title { font-size: 17px; padding: 17px 20px; }
+  .svcpage_nav-list { padding: 14px; gap: 8px; }
+  .svcpage_nav-link { padding: 14px 16px; font-size: 15px; }
+  .svcpage_title { font-size: 30px; }
+  .svcpage_lead { font-size: 17px; }
+  .svcpage_treatment-title { font-size: 23px; }
   .svcpage_actions .svcpage_action { width: 100%; justify-content: center; }
 }
