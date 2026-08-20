@@ -25,21 +25,25 @@
  * changes and `:target` never fires on a click. It listens in the capture phase, ahead
  * of that delegated handler, and takes over.
  *
- * PHOTOS come from the practice's own shoot and are declared per group in `photos`
- * below. A group with none gets no media block at all rather than an empty placeholder,
- * because an unfilled slot on a live page reads as a broken page, and there is no
- * photograph in the set that says anything about cosmetic work.
+ * PHOTOS are declared per group in `photos` below. Paired groups deliberately mix the
+ * two kinds the practice supplied: one licensed clinical photograph showing what the
+ * treatment looks like, and one from the practice's own shoot showing who does it and
+ * where. A group with no photograph would get no media block at all rather than an empty
+ * placeholder, because an unfilled slot on a live page reads as a broken page.
  *
- * To add or change one, crop the source first so the file itself is the right shape:
+ * To add or change one, crop the source first so the file itself is the right shape,
+ * rather than leaving object-fit to do it at display time:
  *
  *   node assets/brand/fit-photo.mjs <source> assets/img/svc-<group>-1.jpg \
- *     1360x765 upper       # a single, full-width photograph
+ *     1360x765 upper       # a single, full-width photograph (16:9)
  *   node assets/brand/fit-photo.mjs <source> assets/img/svc-<group>-1.jpg \
- *     760x475 center       # one of a pair
+ *     760x475 center       # one of a pair (16:10)
  *
- * then add it to that group's `photos` and re-run this script, which copies it into
- * variant-blue/assets/img/ too. Without the copy the blue variant 404s on it, and the
- * site's inline image guard swaps in a branded gradient that hides the failure.
+ * A small source is cropped to its own largest 16:10 window instead of being upscaled to
+ * 760 wide; the display box is 391px at 1440, so anything from about 500px across is
+ * still sharp. Then add it to that group's `photos` and re-run this script, which copies
+ * it into variant-blue/assets/img/ too. Without the copy the blue variant 404s on it,
+ * and the site's inline image guard swaps in a branded gradient that hides the failure.
  *
  * The script is re-runnable: it replaces whatever it built last time.
  */
@@ -67,7 +71,8 @@ const GROUPS = [
   {
     slug: 'orthodontic-treatments',
     photos: [
-      { file: 'svc-orthodontic-treatments-1.jpg', alt: 'A dentist at the Dental Care Centre examining a patient\'s teeth in the chair' },
+      { file: 'svc-orthodontic-treatments-1.jpg', alt: 'Fixed braces on a patient\'s upper teeth, with an interdental brush alongside' },
+      { file: 'svc-orthodontic-treatments-2.jpg', alt: 'A clear aligner being seated over the upper teeth' },
     ],
     title: 'Orthodontic Treatments',
     items: [
@@ -83,16 +88,21 @@ const GROUPS = [
             'and an uneven bite wears the teeth unevenly and can strain the jaw joint.',
           'Treatment starts with records (x-rays, photographs and impressions) and a plan ' +
             'showing what can be achieved and roughly how long it will take. Braces are then ' +
-            'fitted and adjusted at regular reviews. A retainer afterwards holds the result; ' +
-            'without one, teeth drift back.',
+            'fitted and adjusted at regular reviews, or a course of clear aligners is made up ' +
+            'and changed at set intervals. A retainer afterwards holds the result; without ' +
+            'one, teeth drift back.',
         ],
         cards: [
           ['Fixed Braces',
             'Brackets bonded to the teeth and linked by a wire that is adjusted at each ' +
             'review. The most versatile option, and the one that corrects the widest range ' +
             'of cases.'],
+          ['Clear Aligners',
+            'A series of removable, near-invisible trays that move the teeth in small steps. ' +
+            'Taken out to eat and to clean, and far less noticeable than fixed braces, though ' +
+            'they suit some cases better than others.'],
           ['Retainers',
-            'Worn once the braces come off. Teeth drift back towards where they started, so ' +
+            'Worn once treatment finishes. Teeth drift back towards where they started, so ' +
             'the retainer is what makes the result last.'],
           ['Bite and Jaw Alignment',
             'Correcting an overbite, underbite or crossbite. An uneven bite wears the teeth ' +
@@ -108,7 +118,8 @@ const GROUPS = [
   {
     slug: 'implants',
     photos: [
-      { file: 'svc-implants-1.jpg', alt: 'A dentist at the Dental Care Centre' },
+      { file: 'svc-implants-1.jpg', alt: 'A cutaway model showing an implant post seated in the jaw beside a natural tooth root' },
+      { file: 'svc-implants-2.jpg', alt: 'A dentist at the Dental Care Centre' },
     ],
     title: 'Implants',
     items: [
@@ -144,9 +155,10 @@ const GROUPS = [
   },
   {
     slug: 'cosmetic-dentistry',
-    // No photograph yet: nothing in the current set shows veneers or
-    // whitening, and a generic clinical shot would say nothing about either.
-    photos: [],
+    photos: [
+      { file: 'svc-cosmetic-dentistry-1.jpg', alt: 'A veneer being bonded to the front of an upper tooth' },
+      { file: 'svc-cosmetic-dentistry-2.jpg', alt: 'A dentist at the Dental Care Centre working on a patient in the chair' },
+    ],
     title: 'Cosmetic Dentistry',
     intro:
       'Treatment aimed at how the teeth look: their shade, their shape, and the line they ' +
@@ -211,7 +223,8 @@ const GROUPS = [
   {
     slug: 'crowns-bridges-dentures',
     photos: [
-      { file: 'svc-crowns-bridges-dentures-1.jpg', alt: 'A dentist working on a patient\'s upper teeth with a mirror and probe' },
+      { file: 'svc-crowns-bridges-dentures-1.jpg', alt: 'A finished full upper denture held in a gloved hand' },
+      { file: 'svc-crowns-bridges-dentures-2.jpg', alt: 'A dentist working on a patient\'s upper teeth with a mirror and probe' },
     ],
     title: 'Crowns, Bridges & Dentures',
     intro:
