@@ -25,11 +25,13 @@
  * changes and `:target` never fires on a click. It listens in the capture phase, ahead
  * of that delegated handler, and takes over.
  *
- * PHOTOS are declared per group in `photos` below. Paired groups deliberately mix the
- * two kinds the practice supplied: one licensed clinical photograph showing what the
- * treatment looks like, and one from the practice's own shoot showing who does it and
- * where. A group with no photograph would get no media block at all rather than an empty
+ * PHOTOS are declared per group in `photos` below: one runs full width, two sit side by
+ * side, and a group with none gets no media block at all rather than an empty
  * placeholder, because an unfilled slot on a live page reads as a broken page.
+ *
+ * Only the clinical photographs are used on the service panels. The practice asked for
+ * the chairside and portrait shots to come off implants, cosmetic and crowns, so each of
+ * those shows the treatment itself and nothing else.
  *
  * To add or change one, crop the source first so the file itself is the right shape,
  * rather than leaving object-fit to do it at display time:
@@ -119,7 +121,6 @@ const GROUPS = [
     slug: 'implants',
     photos: [
       { file: 'svc-implants-1.jpg', alt: 'A cutaway model showing an implant post seated in the jaw beside a natural tooth root' },
-      { file: 'svc-implants-2.jpg', alt: 'A dentist at the Dental Care Centre' },
     ],
     title: 'Implants',
     items: [
@@ -157,7 +158,6 @@ const GROUPS = [
     slug: 'cosmetic-dentistry',
     photos: [
       { file: 'svc-cosmetic-dentistry-1.jpg', alt: 'A veneer being bonded to the front of an upper tooth' },
-      { file: 'svc-cosmetic-dentistry-2.jpg', alt: 'A dentist at the Dental Care Centre working on a patient in the chair' },
     ],
     title: 'Cosmetic Dentistry',
     intro:
@@ -224,7 +224,6 @@ const GROUPS = [
     slug: 'crowns-bridges-dentures',
     photos: [
       { file: 'svc-crowns-bridges-dentures-1.jpg', alt: 'A finished full upper denture held in a gloved hand' },
-      { file: 'svc-crowns-bridges-dentures-2.jpg', alt: 'A dentist working on a patient\'s upper teeth with a mirror and probe' },
     ],
     title: 'Crowns, Bridges & Dentures',
     intro:
@@ -552,12 +551,37 @@ const CHEVRON =
  * relevant photograph for every group. `is-single` runs one photograph across the full
  * width of the pane; `is-pair` puts two side by side.
  */
+/** Pixel width of a JPEG, read from its SOF marker. */
+function jpegWidth(file) {
+  const b = readFileSync(file);
+  let i = 2;
+  while (i < b.length - 9) {
+    if (b[i] !== 0xff) { i += 1; continue; }
+    const marker = b[i + 1];
+    // SOF0-SOF15, excluding the non-frame markers in that range.
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      return b.readUInt16BE(i + 7);
+    }
+    i += 2 + b.readUInt16BE(i + 2);
+  }
+  return 0;
+}
+
 function media(group) {
   const photos = group.photos || [];
   if (!photos.length) return '';
   const cls = photos.length === 1 ? 'is-single' : 'is-pair';
+  // Never display a photograph wider than it actually is. The pane is 816px at 1440,
+  // and several of the clinical sources are 500-736px across; stretching them to fill it
+  // makes a macro shot read as an unrecognisable blur. The cap is measured from the file
+  // rather than declared, so it cannot drift when a photograph is replaced.
+  let cap = '';
+  if (photos.length === 1) {
+    const w = jpegWidth(join(ROOT, 'assets/img', photos[0].file));
+    if (w) cap = ` style="max-width:${w}px"`;
+  }
   return (
-    `<div class="svcpage_media ${cls}">` +
+    `<div class="svcpage_media ${cls}"${cap}>` +
     photos
       .map(
         (p) =>
