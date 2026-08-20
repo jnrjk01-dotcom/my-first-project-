@@ -25,16 +25,21 @@
  * changes and `:target` never fires on a click. It listens in the capture phase, ahead
  * of that delegated handler, and takes over.
  *
- * PHOTOS: two reserved slots per group, using the same `.service-item_photo` markup and
- * styling as the home page cards, and deliberately referencing no image file. A filename
- * that does not exist yet would 404, and the site's inline image guard would quietly
- * swap in a branded gradient, hiding the fact that the photo is still missing. To fill
- * one, replace the slot's contents with:
+ * PHOTOS come from the practice's own shoot and are declared per group in `photos`
+ * below. A group with none gets no media block at all rather than an empty placeholder,
+ * because an unfilled slot on a live page reads as a broken page, and there is no
+ * photograph in the set that says anything about cosmetic work.
  *
- *   <img class="service-item_photo-img" src="assets/img/svc-<group>-1.jpg"
- *        alt="<what the photo shows>" loading="lazy"/>
+ * To add or change one, crop the source first so the file itself is the right shape:
  *
- * Mirror any image into variant-blue/assets/img/ as well.
+ *   node assets/brand/fit-photo.mjs <source> assets/img/svc-<group>-1.jpg \
+ *     1360x765 upper       # a single, full-width photograph
+ *   node assets/brand/fit-photo.mjs <source> assets/img/svc-<group>-1.jpg \
+ *     760x475 center       # one of a pair
+ *
+ * then add it to that group's `photos` and re-run this script, which copies it into
+ * variant-blue/assets/img/ too. Without the copy the blue variant 404s on it, and the
+ * site's inline image guard swaps in a branded gradient that hides the failure.
  *
  * The script is re-runnable: it replaces whatever it built last time.
  */
@@ -61,6 +66,9 @@ const WA_DIGITS = '263778398111';
 const GROUPS = [
   {
     slug: 'orthodontic-treatments',
+    photos: [
+      { file: 'svc-orthodontic-treatments-1.jpg', alt: 'A dentist at the Dental Care Centre examining a patient\'s teeth in the chair' },
+    ],
     title: 'Orthodontic Treatments',
     items: [
       {
@@ -99,6 +107,9 @@ const GROUPS = [
   },
   {
     slug: 'implants',
+    photos: [
+      { file: 'svc-implants-1.jpg', alt: 'A dentist at the Dental Care Centre' },
+    ],
     title: 'Implants',
     items: [
       {
@@ -133,6 +144,9 @@ const GROUPS = [
   },
   {
     slug: 'cosmetic-dentistry',
+    // No photograph yet: nothing in the current set shows veneers or
+    // whitening, and a generic clinical shot would say nothing about either.
+    photos: [],
     title: 'Cosmetic Dentistry',
     intro:
       'Treatment aimed at how the teeth look: their shade, their shape, and the line they ' +
@@ -196,6 +210,9 @@ const GROUPS = [
   },
   {
     slug: 'crowns-bridges-dentures',
+    photos: [
+      { file: 'svc-crowns-bridges-dentures-1.jpg', alt: 'A dentist working on a patient\'s upper teeth with a mirror and probe' },
+    ],
     title: 'Crowns, Bridges & Dentures',
     intro:
       'Rebuilding teeth that are broken down or heavily filled, and replacing those that ' +
@@ -284,6 +301,9 @@ const GROUPS = [
   },
   {
     slug: 'restorative-treatments',
+    photos: [
+      { file: 'svc-restorative-treatments-1.jpg', alt: 'Close view of a patient\'s teeth being examined with a mirror and probe' },
+    ],
     title: 'Restorative Treatments',
     intro:
       'Saving a tooth that has decayed or become infected, so it stays in the mouth and ' +
@@ -345,6 +365,9 @@ const GROUPS = [
   },
   {
     slug: 'oral-surgery',
+    photos: [
+      { file: 'svc-oral-surgery-1.jpg', alt: 'The practice autoclave, used to sterilise instruments between patients' },
+    ],
     title: 'Oral Surgery',
     intro:
       'Removing a tooth that cannot reasonably be saved, including wisdom teeth and roots ' +
@@ -402,6 +425,10 @@ const GROUPS = [
   },
   {
     slug: 'preventive-dentistry',
+    photos: [
+      { file: 'svc-preventive-dentistry-1.jpg', alt: 'Framed children\'s paintings on the waiting room wall' },
+      { file: 'svc-preventive-dentistry-2.jpg', alt: 'The aquarium in the Dental Care Centre waiting area' },
+    ],
     title: 'Preventive Dentistry',
     intro:
       'The routine work that keeps the rest of this page unnecessary: finding problems ' +
@@ -504,9 +531,30 @@ const CHEVRON =
   'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ' +
   'aria-hidden="true"><path d="M1.5 1.5 6.5 6.5l-5 5"/></svg>';
 
-const photoSlot = (slug, n) =>
-  `<div class="service-item_photo" data-photo-slot="svc-${slug}-${n}">` +
-  '<span class="service-item_photo-label">Photo</span></div>';
+/**
+ * A group's photographs, or nothing at all.
+ *
+ * A group with no photograph gets no media block rather than an empty placeholder: an
+ * unfilled slot on a live page reads as a broken page, and the practice does not have a
+ * relevant photograph for every group. `is-single` runs one photograph across the full
+ * width of the pane; `is-pair` puts two side by side.
+ */
+function media(group) {
+  const photos = group.photos || [];
+  if (!photos.length) return '';
+  const cls = photos.length === 1 ? 'is-single' : 'is-pair';
+  return (
+    `<div class="svcpage_media ${cls}">` +
+    photos
+      .map(
+        (p) =>
+          `<img class="svcpage_photo" src="assets/img/${p.file}" ` +
+          `alt="${esc(p.alt)}" loading="lazy" decoding="async"/>`
+      )
+      .join('') +
+    '</div>'
+  );
+}
 
 function treatmentBlock(item, showTitle) {
   return (
@@ -538,10 +586,7 @@ function panel(group) {
   );
   return (
     `<article class="svcpage_panel" id="${group.slug}" aria-labelledby="${group.slug}-title">` +
-    '<div class="svcpage_media">' +
-    photoSlot(group.slug, 1) +
-    photoSlot(group.slug, 2) +
-    '</div>' +
+    media(group) +
     `<h2 class="svcpage_title" id="${group.slug}-title">${esc(group.title)}</h2>` +
     `<p class="svcpage_lead">${esc(intro)}</p>` +
     group.items.map((it) => treatmentBlock(it, !single)).join('') +
@@ -711,13 +756,23 @@ ${CSS_MARKER}
 
 .svcpage_media {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 18px;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
-/* The shared slot label is set at 0.35 opacity for the home page cards, which on this
-   ground measures 1.2:1 and reads as an empty box rather than a reserved one. */
-.svcpage_media .service-item_photo-label { color: var(--svc-ink-soft); opacity: 1; }
+.svcpage_media.is-single { grid-template-columns: 1fr; }
+.svcpage_media.is-pair { grid-template-columns: 1fr 1fr; }
+.svcpage_photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The sources are cropped to these ratios by assets/brand/fit-photo.mjs, so object-fit
+     only has to absorb rounding. It is stated so a later replacement at the wrong ratio
+     is letterboxed rather than stretched. */
+  object-fit: cover;
+  border-radius: 12px;
+}
+.svcpage_media.is-single .svcpage_photo { aspect-ratio: 16 / 9; }
+.svcpage_media.is-pair .svcpage_photo { aspect-ratio: 16 / 10; }
 .svcpage_title { margin: 0 0 16px; color: var(--svc-ink); font-size: 44px; }
 .svcpage_lead {
   margin: 0 0 8px;
@@ -814,7 +869,7 @@ ${CSS_MARKER}
   .svcpage_panel { scroll-margin-top: 92px; }
 }
 @media screen and (max-width: 767px) {
-  .svcpage_media { grid-template-columns: 1fr; }
+  .svcpage_media.is-pair { grid-template-columns: 1fr; }
   .svcpage_cards { grid-template-columns: 1fr; }
   .svcpage_nav-title { font-size: 17px; padding: 17px 20px; }
   .svcpage_nav-list { padding: 14px; gap: 8px; }
@@ -1075,9 +1130,12 @@ for (const rel of ['service.html', 'variant-blue/service.html']) {
     (n, g) => n + g.items.reduce((m, it) => m + it.cards.length, 0),
     0
   );
+  const photos = GROUPS.reduce((n, g) => n + (g.photos || []).length, 0);
+  const bare = GROUPS.filter((g) => !(g.photos || []).length).map((g) => g.slug);
   console.log(
     `  ${rel.padEnd(28)} ${kind}: ${GROUPS.length} groups, ${treatments} treatments, ` +
-      `${cards} cards, ${GROUPS.length * 2} photo slots`
+      `${cards} cards, ${photos} photos` +
+      (bare.length ? ` (no photo: ${bare.join(', ')})` : '')
   );
 }
 
@@ -1127,6 +1185,28 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
 }
 
 /* 4. Assets, mirrored into both trees. */
+/* The two trees have independent asset directories; a photograph written only to the
+   root one 404s on the blue variant, where the site's image guard would quietly swap in
+   a branded gradient and hide the fact. */
+let mirrored = 0;
+for (const g of GROUPS) {
+  for (const ph of g.photos || []) {
+    const src = join(ROOT, 'assets/img', ph.file);
+    if (!existsSync(src)) {
+      console.error(`  MISSING SOURCE assets/img/${ph.file} — the page will 404 on it`);
+      process.exitCode = 1;
+      continue;
+    }
+    const dst = join(ROOT, 'variant-blue/assets/img', ph.file);
+    const bytes = readFileSync(src);
+    if (!existsSync(dst) || Buffer.compare(readFileSync(dst), bytes) !== 0) {
+      writeFileSync(dst, bytes);
+      mirrored += 1;
+    }
+  }
+}
+if (mirrored) console.log(`  ${mirrored} photo(s) mirrored into variant-blue/assets/img/`);
+
 for (const js of ['assets/js/service-detail.js', 'variant-blue/assets/js/service-detail.js']) {
   writeFileSync(join(ROOT, js), JS);
   console.log(`  ${js.padEnd(44)} written`);

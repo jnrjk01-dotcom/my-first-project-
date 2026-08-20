@@ -9529,13 +9529,23 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
 
 .svcpage_media {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 18px;
-  margin-bottom: 26px;
+  margin-bottom: 28px;
 }
-/* The shared slot label is set at 0.35 opacity for the home page cards, which on this
-   ground measures 1.2:1 and reads as an empty box rather than a reserved one. */
-.svcpage_media .service-item_photo-label { color: var(--svc-ink-soft); opacity: 1; }
+.svcpage_media.is-single { grid-template-columns: 1fr; }
+.svcpage_media.is-pair { grid-template-columns: 1fr 1fr; }
+.svcpage_photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The sources are cropped to these ratios by assets/brand/fit-photo.mjs, so object-fit
+     only has to absorb rounding. It is stated so a later replacement at the wrong ratio
+     is letterboxed rather than stretched. */
+  object-fit: cover;
+  border-radius: 12px;
+}
+.svcpage_media.is-single .svcpage_photo { aspect-ratio: 16 / 9; }
+.svcpage_media.is-pair .svcpage_photo { aspect-ratio: 16 / 10; }
 .svcpage_title { margin: 0 0 16px; color: var(--svc-ink); font-size: 44px; }
 .svcpage_lead {
   margin: 0 0 8px;
@@ -9632,7 +9642,7 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   .svcpage_panel { scroll-margin-top: 92px; }
 }
 @media screen and (max-width: 767px) {
-  .svcpage_media { grid-template-columns: 1fr; }
+  .svcpage_media.is-pair { grid-template-columns: 1fr; }
   .svcpage_cards { grid-template-columns: 1fr; }
   .svcpage_nav-title { font-size: 17px; padding: 17px 20px; }
   .svcpage_nav-list { padding: 14px; gap: 8px; }
