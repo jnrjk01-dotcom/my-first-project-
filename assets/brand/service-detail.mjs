@@ -438,7 +438,8 @@ const GROUPS = [
   {
     slug: 'preventive-dentistry',
     photos: [
-      { file: 'svc-preventive-dentistry-1.jpg', alt: 'A polishing cup being used on an upper front tooth' },
+      { file: 'svc-preventive-dentistry-1.jpg', alt: 'An ultrasonic scaler tip lifting hardened deposit off a lower molar' },
+      { file: 'svc-preventive-dentistry-2.jpg', alt: 'A polishing cup being used on an upper front tooth' },
     ],
     title: 'Preventive Dentistry',
     intro:
