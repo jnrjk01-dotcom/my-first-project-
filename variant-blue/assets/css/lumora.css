@@ -9662,3 +9662,64 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   grid-template-columns: max-content;
   max-width: none;
 }
+
+/* --- medical aid band --- */
+/* Sits between the outreach section and the dark closing call to action. It carries the
+   same light ground as the outreach section above it so the two read as one light band
+   before the page goes dark, with the logo tiles picked out in white against it. */
+.section_aid { background-color: #f4f7fa; }
+.aid_header { max-width: 640px; margin: 0 auto 40px; text-align: center; }
+.aid_header .section_tag { display: inline-flex; }
+.aid_title { margin: 16px 0 14px; color: var(--primitive-color--primary-900); }
+.aid_title .text-highlighted { color: var(--primitive-color--primary-600); }
+.aid_para {
+  margin: 0;
+  color: #55636b;
+  line-height: 1.6;
+}
+@supports (color: color-mix(in srgb, red 50%, white)) {
+  .aid_para { color: color-mix(in srgb, var(--primitive-color--primary-900) 70%, #ffffff); }
+}
+
+/* Flex rather than grid: eleven logos do not divide evenly into any sensible column
+   count, and this centres the short last row instead of leaving a hole in it. */
+.aid_grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  /* flex-direction is stated because the sheet already sets ul { flex-direction: column }
+     further up, which would otherwise stack all eleven logos one per row. */
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 16px;
+}
+.aid_item {
+  flex: 0 1 172px;
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid rgba(1, 31, 35, .09);
+  border-radius: 12px;
+}
+/* max-width/max-height rather than a fixed size: the logos have been cropped to their
+   own ink but keep their own proportions, so each fills the tile on whichever axis
+   binds first and none is stretched. */
+.aid_logo {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+@media screen and (max-width: 767px) {
+  .aid_header { margin-bottom: 30px; }
+  .aid_grid { gap: 12px; }
+  .aid_item { flex: 0 1 calc(50% - 6px); height: 88px; padding: 12px 16px; }
+}
