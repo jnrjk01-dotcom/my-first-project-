@@ -9641,3 +9641,13 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   .svcpage_treatment-title { font-size: 23px; }
   .svcpage_actions .svcpage_action { width: 100%; justify-content: center; }
 }
+
+/* --- footer: single link column --- */
+/* The footer menu was a three-column grid holding Navigation, Legal and Follow us. With
+   only Navigation left the other two tracks would stay behind as empty space beside it,
+   so the grid follows the number of columns actually present. The selector matches only
+   when there is exactly one column, so restoring a second brings the old layout back. */
+.footer_menu:not(:has(.footer-links-column ~ .footer-links-column)) {
+  grid-template-columns: max-content;
+  max-width: none;
+}
