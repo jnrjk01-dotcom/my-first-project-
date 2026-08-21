@@ -12,7 +12,9 @@
  * nothing is stretched. Duplicating them at a second size would double the number of
  * images to replace whenever a photograph changes.
  *
- * The script is idempotent: a slot that already holds an image is left alone.
+ * The script is idempotent by comparing sources rather than by checking emptiness: a
+ * slot already holding the photograph named below is left alone, and one holding a
+ * different photograph is updated, so changing the map above is enough to re-point it.
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -23,8 +25,11 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /**
  * Card slot -> the services page photograph for that group, with its alt text.
- * Where a group carries a pair on service.html, the card takes the first: it is the one
- * that shows the treatment rather than the practice.
+ * Where a group carries a pair on service.html, the card takes whichever of the two
+ * reads better at card size, which is not always the first: preventive dentistry uses
+ * the polishing photograph rather than the scaling one, both because it is the clearer
+ * image and because it is 736px wide against the scaling photograph's 381px, so it is
+ * not upscaled into the 440px box.
  */
 const PHOTOS = {
   orthodontics: [
@@ -40,8 +45,8 @@ const PHOTOS = {
     "Close view of a patient's teeth being examined with a mirror and probe",
   ],
   'preventive-dentistry': [
-    'svc-preventive-dentistry-1.jpg',
-    'An ultrasonic scaler tip lifting hardened deposit off a lower molar',
+    'svc-preventive-dentistry-2.jpg',
+    'A polishing cup being used on an upper front tooth',
   ],
 };
 
@@ -64,6 +69,7 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
   const before = counts(s);
   const dir = rel.startsWith('variant-blue') ? 'variant-blue/assets/img' : 'assets/img';
   const done = [];
+  let newImages = 0;
 
   for (const [slot, [fileName, alt]] of Object.entries(PHOTOS)) {
     // A missing file would 404, and the site's inline image guard would swap in a
@@ -83,8 +89,11 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
     const close = s.indexOf('</div>', open);
     if (close === -1) continue;
     const inner = s.slice(open + marker.length, close);
-    if (inner.includes('<img')) continue; // already filled
-    if (!inner.includes('service-item_photo-label')) {
+    // Already correct, so leave it: this is what makes re-running a no-op.
+    if (inner.includes(`src="assets/img/${fileName}"`)) continue;
+    // Anything else is either the untouched placeholder or a photograph that has since
+    // been changed in the map above; both get replaced.
+    if (!inner.includes('service-item_photo-label') && !inner.includes('<img')) {
       console.error(`  ${rel}: slot "${slot}" holds something unexpected — skipped`);
       process.exitCode = 1;
       continue;
@@ -92,6 +101,7 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
     const img =
       `<img class="service-item_photo-img" src="assets/img/${fileName}" ` +
       `alt="${esc(alt)}" loading="lazy" decoding="async"/>`;
+    if (!inner.includes('<img')) newImages += 1;
     s = s.slice(0, open + marker.length) + img + s.slice(close);
     done.push(slot);
   }
@@ -107,7 +117,7 @@ for (const rel of ['index.html', 'variant-blue/index.html']) {
     after.div !== before.div ||
     after.section !== before.section ||
     after.script !== before.script ||
-    after.img !== before.img + done.length
+    after.img !== before.img + newImages
   ) {
     console.error(`  ${rel}: ABORTED — structure drifted`);
     console.error(`    before ${JSON.stringify(before)}  after ${JSON.stringify(after)}`);
