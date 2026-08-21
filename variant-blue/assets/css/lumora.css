@@ -9092,7 +9092,7 @@ figure {
 @media (max-width:991px){.lead-form_card{max-width:100%;}}
 
 /* ===== Closing CTA photo section + footer polish (blue) ===== */
-.section_cta{position:relative;background-image:linear-gradient(115deg, rgba(6,24,46,.93), rgba(6,24,46,.72)), url('../img/gen_about-hero-image.jpg');background-size:cover;background-position:center;}
+.section_cta{position:relative;background-image:linear-gradient(115deg, rgba(6,24,46,.93), rgba(6,24,46,.72)), url('../img/cta-team.jpg');background-size:cover;background-position:center 26%;}
 .footer{border-top:3px solid var(--primitive-color--primary-500,#2f80ff);}
 footer{border-top:3px solid var(--primitive-color--primary-500,#2f80ff);}
 
