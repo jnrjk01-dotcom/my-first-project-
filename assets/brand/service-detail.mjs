@@ -378,7 +378,7 @@ const GROUPS = [
   {
     slug: 'oral-surgery',
     photos: [
-      { file: 'svc-oral-surgery-1.jpg', alt: 'The practice autoclave, used to sterilise instruments between patients' },
+      { file: 'svc-oral-surgery-1.jpg', alt: 'Extraction instruments laid out on a sterile tray during a surgical extraction' },
     ],
     title: 'Oral Surgery',
     intro:
@@ -438,8 +438,7 @@ const GROUPS = [
   {
     slug: 'preventive-dentistry',
     photos: [
-      { file: 'svc-preventive-dentistry-1.jpg', alt: 'Framed children\'s paintings on the waiting room wall' },
-      { file: 'svc-preventive-dentistry-2.jpg', alt: 'The aquarium in the Dental Care Centre waiting area' },
+      { file: 'svc-preventive-dentistry-1.jpg', alt: 'A polishing cup being used on an upper front tooth' },
     ],
     title: 'Preventive Dentistry',
     intro:
