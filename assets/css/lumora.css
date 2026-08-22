@@ -9113,7 +9113,7 @@ footer{border-top:3px solid var(--primitive-color--primary-500,#24a3b1);}
 .testimonial-slider_card .testimonial-author_image{border:3px solid rgba(255,255,255,.6);}
 
 /* ===== Team section: greenery clinic background + cyan overlay ===== */
-.section_team{background-image:url('../img/gen_team-bg.jpg')!important;background-size:cover!important;background-position:center!important;background-attachment:fixed;}
+.section_team{background-image:url('../img/team-bg-clinic.jpg')!important;background-size:cover!important;background-position:center!important;background-attachment:fixed;}
 .section_team .home-team_header-title,.section_team .home-team_header-para{color:#ffffff!important;}
 .section_team .home-team_header-para{color:rgba(255,255,255,.85)!important;}
 .section_team .text-highlighted{color:#7fe3ef!important;}
@@ -9711,4 +9711,21 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   .aid_header { margin-bottom: 30px; }
   .aid_grid { gap: 12px; }
   .aid_item { flex: 0 1 calc(50% - 6px); height: 88px; padding: 12px 16px; }
+}
+
+/* --- team: single member + photo overlay --- */
+/* The sheet above claims a cyan overlay on this section but only ever set a background
+   image; the AI interior it used was dark enough that white text held anyway. The
+   practice's own waiting-area photograph is bright, and without a real overlay the
+   heading measured under 2:1 against it. The gradient is stated here, over the image,
+   and needs !important to beat the earlier rule's own !important. */
+.section_team {
+  background-image: linear-gradient(115deg, rgba(2,47,52,.90), rgba(2,47,52,.72)),
+                    url('../img/team-bg-clinic.jpg') !important;
+}
+/* One dentist, so the three-column grid would leave two empty tracks beside the card.
+   Scoped with :has to exactly one item, so adding a colleague restores the old layout. */
+.team_list:not(:has(.w-dyn-item ~ .w-dyn-item)) {
+  grid-template-columns: minmax(0, 400px);
+  justify-content: center;
 }
