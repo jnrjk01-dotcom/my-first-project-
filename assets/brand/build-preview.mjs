@@ -24,9 +24,18 @@
  *
  * The build prints whether fonts were inlined, so a silent fallback cannot slip past.
  *
+ * LINKING BETWEEN PAGES. Each page is published as its own artifact, so a relative
+ * href like "about.html" would resolve against the artifact host and 404. PREVIEW_LINKS
+ * takes a JSON map of page name to published URL and rewrites those links, which is what
+ * makes the previews navigable as a set. A fragment is carried across, so
+ * service.html#implants lands on the right treatment. Anything internal and unmapped is
+ * neutralised instead of being left to 404.
+ *
+ *   PREVIEW_LINKS='{"index.html":"https://…","about.html":"https://…"}' \
+ *     node assets/brand/build-preview.mjs out.html
+ *
  * This is a PREVIEW ARTEFACT, not part of the site. The site itself still ships as the
- * ordinary multi-page static build; nothing here is referenced by it. Only the home
- * page is included, and internal .html links are made inert rather than left to 404.
+ * ordinary multi-page static build; nothing here is referenced by it.
  */
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -155,7 +164,40 @@ css = css.replace(/<\/(style)/gi, '<\\/$1');
 
 /* Distinct per page: the previews sit side by side in the artifact gallery, where a
    shared title would make them indistinguishable. */
-const TITLES = { 'index.html': 'Dental Care Centre', 'service.html': 'Dental Care Centre Services' };
+const TITLES = {
+  'index.html': 'Dental Care Centre',
+  'service.html': 'Dental Care Centre Services',
+  'about.html': 'About Dental Care Centre',
+  'blog.html': 'Dental Care Centre Journal',
+};
+/* ── Cross-page links ───────────────────────────────────────────────────── */
+const LINKS = (() => {
+  try {
+    return JSON.parse(process.env.PREVIEW_LINKS || '{}');
+  } catch (e) {
+    console.error('PREVIEW_LINKS is not valid JSON — internal links will be neutralised');
+    return {};
+  }
+})();
+
+let mapped = 0;
+let inert = 0;
+body = body.replace(/(\shref=")([^"]+)(")/g, (m, a, href, c) => {
+  if (/^(https?:|mailto:|tel:|#|data:)/.test(href)) return m;
+  const [page, frag] = href.split('#');
+  const to = LINKS[page];
+  if (to) {
+    mapped += 1;
+    return `${a}${to}${frag ? '#' + frag : ''}${c} target="_top"`;
+  }
+  if (/\.html$/i.test(page)) {
+    // Unmapped internal page: give it something harmless rather than a 404.
+    inert += 1;
+    return `${a}#${c} data-preview-inert="${page}"`;
+  }
+  return m;
+});
+
 const title = TITLES[SRC] || 'Dental Care Centre';
 
 const out = `<title>${title}</title>
@@ -174,6 +216,7 @@ ${bodyJs}
 writeFileSync(OUT, out);
 const mb = (Buffer.byteLength(out) / 1048576).toFixed(2);
 console.log(`wrote ${OUT}`);
+console.log(`links: ${mapped} mapped, ${inert} neutralised`);
 console.log(`size: ${mb} MB (limit 16 MB)`);
 console.log(`fonts: ${fontFace ? 'Sora inlined' : 'NONE (fallback faces)'}`);
 console.log(`inlined: ${table.size} unique assets (${cache.size} cached), ${libs.length} scripts`);
