@@ -9753,3 +9753,70 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   user-select: none;
 }
 @media print { .about-hero_watermark { display: none; } }
+
+/* --- about: dentist profile --- */
+/* Card on one side, his words on the other, so the single portrait is used once on the
+   page. Below 992 the card sits above the text rather than beside it. */
+.dcc-team-profile {
+  display: grid;
+  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+/* The list is already constrained to one 400px column by the team rules; inside this
+   grid it should fill the track it has been given. */
+.dcc-team-profile .team_list { grid-template-columns: minmax(0, 1fr); justify-content: stretch; }
+
+.dcc-profile { color: rgba(255, 255, 255, .92); padding-top: 6px; }
+.dcc-profile_q {
+  margin: 0 0 18px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #fff;
+}
+.dcc-profile_quote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  max-width: 62ch;
+}
+.dcc-profile_quote p {
+  margin: 0 0 16px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, .92);
+}
+.dcc-profile_cite {
+  /* The sheet carries a bare footer border-top rule in the accent colour for the
+     page footer, which this element inherits simply by being a <footer>. Zeroed here so
+     the short accent rule below is the only line drawn. */
+  border-top: 0;
+  margin-top: 22px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  font-style: normal;
+}
+.dcc-profile_cite::before {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 2px;
+  margin-bottom: 12px;
+  background: var(--primitive-color--primary-500);
+}
+
+/* The white-text overrides written for this section target the home page's header
+   classes. The about page uses its own, so its heading and standfirst were left dark on
+   the photograph and measured close to unreadable. */
+.section_team .about-team_header-content h2,
+.section_team .about-team_para {
+  color: #fff !important;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .45);
+}
+.section_team .about-team_para { color: rgba(255, 255, 255, .9) !important; }
+
+@media screen and (max-width: 991px) {
+  .dcc-team-profile { grid-template-columns: minmax(0, 1fr); }
+  .dcc-team-profile .team_list { max-width: 400px; }
+}
