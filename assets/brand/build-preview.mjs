@@ -198,6 +198,23 @@ body = body.replace(/(\shref=")([^"]+)(")/g, (m, a, href, c) => {
   return m;
 });
 
+/* ── Encoding ───────────────────────────────────────────────────────────────
+   The bundle is published as a fragment: the host supplies <head>, so this file cannot
+   declare its own charset. Opened anywhere that does not default to UTF-8 (a file:// URL,
+   for one) every curly apostrophe in the copy renders as mojibake. Escaping non-ASCII to
+   numeric references makes the bytes pure ASCII, so the declared charset stops mattering.
+
+   Script bodies are left alone: an entity inside JavaScript is just those characters, so
+   escaping there would change what the code does rather than how it looks. */
+body = body
+  .split(/(<script[\s\S]*?<\/script>)/i)
+  .map((chunk, i) =>
+    i % 2 === 1
+      ? chunk
+      : chunk.replace(/[\u0080-\uFFFF]/g, (ch) => `&#${ch.codePointAt(0)};`)
+  )
+  .join('');
+
 const title = TITLES[SRC] || 'Dental Care Centre';
 
 const out = `<title>${title}</title>
