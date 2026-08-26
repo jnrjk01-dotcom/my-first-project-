@@ -28,22 +28,19 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const OLD_ROLE = 'Pediatric Dentist';
 const NEW_ROLE = 'Dentist';
 
-const QUESTION = 'Why does the practice run an outreach programme?';
+const QUESTION = 'Why did you become a dentist?';
 const PARAS = [
-  '&ldquo;Nyemwerera. Ubobotheke. One word in Shona, one in Ndebele, and both of them ' +
-    'mean smile. We put them on the banner together because a smile does not belong to ' +
-    'one language, and because smiling itself is free, even when the dentistry behind ' +
-    'it is not.',
-  'Most of what I do here is not complicated. Examinations and cleanings, fillings, ' +
-    'root canals, extractions, crowns and bridges, dentures, braces. What makes it ' +
-    'complicated is time. The difference between a filling and losing the tooth is ' +
-    'usually a few months, and months are exactly what people run out of when a dental ' +
-    'visit feels like something they cannot afford.',
-  'So we work in both directions. In the practice we treat whoever comes through the ' +
-    'door. Through Nyemwerera Ubobotheke we go out to the communities and the schools, ' +
-    'to the children nobody would have brought in. Improving the quality of life for ' +
-    'vulnerable communities is written on our banner because it is how we spend our ' +
-    'time.&rdquo;',
+  '&ldquo;Dentistry either suits you or it does not. It suited me from the beginning. I ' +
+    'like working with my hands, I like that a problem in a mouth is a real problem with ' +
+    'a real answer, and I like being the person who takes someone out of pain. People ask ' +
+    'how I can spend a day looking into mouths. I have never once found it strange.',
+  'I will not pretend this practice is right for everybody. If you want the cheapest ' +
+    'quote in Bulawayo, there is one somewhere else. If you want to be told a tooth can ' +
+    'be saved when it cannot, I am the wrong dentist. What you get from me is the truth ' +
+    'about what is actually in front of us, before the work starts rather than after it.',
+  'Nyemwerera. Ubobotheke. Smile, in Shona and in Ndebele, and both of them went on the ' +
+    'banner because a smile costs nothing and belongs to everyone. The dentistry behind ' +
+    'it is the part that has to be done properly. That is the part I am here for.&rdquo;',
 ];
 const CITE = `Dr. Mutemi, ${NEW_ROLE}`;
 
@@ -184,8 +181,30 @@ for (const rel of ['about.html', 'variant-blue/about.html']) {
   const original = readFileSync(file, 'utf8');
   const before = counts(original);
 
-  if (original.includes('dcc-profile')) {
-    console.log(`  ${rel.padEnd(28)} message already present`);
+  // A message already on the page is replaced, not left alone: the copy above is the
+  // single source for it, so editing PARAS and re-running is how it gets updated.
+  if (original.includes('<div class="dcc-profile">')) {
+    const pOpen = original.indexOf('<div class="dcc-profile">');
+    const pEnd = endOfElement(original, pOpen, 'div');
+    if (pEnd === -1) {
+      console.error(`  ${rel}: could not close the existing message — skipped`);
+      process.exitCode = 1;
+      continue;
+    }
+    const replaced = original.slice(0, pOpen) + PROFILE + original.slice(pEnd);
+    const a = counts(original);
+    const b2 = counts(replaced);
+    if (a.div !== b2.div || b2.div !== b2.divClose) {
+      console.error(`  ${rel}: ABORTED — structure drifted replacing the message`);
+      process.exitCode = 1;
+      continue;
+    }
+    if (replaced !== original) {
+      writeFileSync(file, replaced);
+      console.log(`  ${rel.padEnd(28)} message refreshed`);
+    } else {
+      console.log(`  ${rel.padEnd(28)} message already current`);
+    }
     continue;
   }
 
