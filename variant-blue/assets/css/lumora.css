@@ -9740,3 +9740,27 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   grid-template-columns: minmax(0, 400px);
   justify-content: center;
 }
+
+/* --- about hero: staff photo watermark --- */
+/* The wrapper ships as static, so the mark has nothing to position against until it is
+   made a containing block. */
+.about-hero_image-wrap { position: relative; }
+/* Webflow baked scale3d(1.5,1.5,1) onto this image as the start of a zoom-out reveal,
+   and the exported interaction never runs, so it sits permanently at 1.5x and shows only
+   the middle two thirds. That was survivable on a generic interior shot; on a group
+   portrait it cuts the people at both ends in half. !important beats the inline style. */
+.about-hero_image { transform: none !important; }
+.about-hero_watermark {
+  position: absolute;
+  right: clamp(14px, 3%, 40px);
+  bottom: clamp(12px, 4%, 34px);
+  width: clamp(120px, 17%, 210px);
+  height: auto;
+  opacity: .26;
+  /* A white mark can land on a light part of a photograph and vanish; the drop shadow
+     keeps an edge under it wherever it falls. */
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .55));
+  pointer-events: none;
+  user-select: none;
+}
+@media print { .about-hero_watermark { display: none; } }
