@@ -3,9 +3,14 @@
  *
  *   node assets/brand/home-card-photos.mjs
  *
- * Each card already reserves a 16:10 slot (see service-photos.mjs). This points each one
- * at the photograph its own group already uses on service.html, so the two pages show
- * the same thing for the same treatment and there is nothing extra to keep in step.
+ * Each card already reserves a 16:10 slot (see service-photos.mjs). Most cards point at
+ * the photograph their group already uses on service.html, so the two pages show the same
+ * thing for the same treatment and there is nothing extra to keep in step.
+ *
+ * Restorative treatments is the exception and has its own file. The home card covers
+ * fillings through to implants and dentures, so a denture reads for the whole card; the
+ * services page group of the same name is only fillings and root canals, where a denture
+ * would be the wrong picture. Sharing one file cannot serve both.
  *
  * The files are reused as they are rather than re-cropped into card-sized copies: the
  * slot is `object-fit: cover`, so a 16:9 source loses a sliver top and bottom and
@@ -41,8 +46,8 @@ const PHOTOS = {
     'A veneer being bonded to the front of an upper tooth',
   ],
   'restorative-treatments': [
-    'svc-restorative-treatments-1.jpg',
-    "Close view of a patient's teeth being examined with a mirror and probe",
+    'card-restorative.jpg',
+    'A flexible partial denture seated on a plaster model of the upper jaw',
   ],
   'preventive-dentistry': [
     'svc-preventive-dentistry-2.jpg',
@@ -59,6 +64,20 @@ const counts = (s) => ({
   img: (s.match(/<img\b/g) || []).length,
   script: (s.match(/<script\b/g) || []).length,
 });
+
+/* Photographs used only by the cards are not installed by the services page script, so
+   they are copied into the other tree here. A file present in only one tree 404s in the
+   other, where the site's image guard swaps in a branded gradient and hides it. */
+for (const [file] of Object.values(PHOTOS)) {
+  const src = join(ROOT, 'assets/img', file);
+  const dst = join(ROOT, 'variant-blue/assets/img', file);
+  if (!existsSync(src)) continue;
+  const bytes = readFileSync(src);
+  if (!existsSync(dst) || Buffer.compare(readFileSync(dst), bytes) !== 0) {
+    writeFileSync(dst, bytes);
+    console.log(`  ${file} mirrored into variant-blue/assets/img/`);
+  }
+}
 
 let changed = 0;
 for (const rel of ['index.html', 'variant-blue/index.html']) {
