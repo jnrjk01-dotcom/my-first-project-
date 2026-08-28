@@ -9827,3 +9827,48 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
    element because its inline style has no opacity:0 to match on, so it stayed at 1.5x
    with a third of the picture cropped off. The sign has to be readable whole. */
 .home-value_image { transform: none !important; }
+
+/* --- services: phone scroll carousel --- */
+/* Only while services-pin.js is driving. Without the class the rail stays the native
+   scroll-snap carousel, which is what phones get when the script does not run: no
+   JavaScript, reduced motion, or a screen too short to pin the cards into. */
+@media screen and (max-width: 767px) {
+  /* The container scrolls by transform now, so its own scrolling has to stop or the
+     two fight each other: a swipe would move the rail while the pin moves it back. */
+  .dcc-svc-pinned .service_list {
+    overflow: visible !important;
+    scroll-snap-type: none !important;
+    /* 20px of scrollbar gutter is no longer needed and the height has to be won back:
+       the pinned block only fits a phone screen with the booking bar allowed for. */
+    padding-bottom: 4px !important;
+    /* Vertical swipes still scroll the page, which is what now drives the carousel. */
+    touch-action: pan-y;
+  }
+  .dcc-svc-pinned .service_wrap { overflow: hidden !important; }
+
+  /* Webflow left translate(0, 40px) on the camera as the opening state of an interaction
+     the export never runs, the same kind of stranded start-state as the about page hero.
+     It offsets the section for no reason, and a transformed ancestor is also what stops
+     a pinned child from holding still, so it goes. */
+  .dcc-svc-pinned .scroll-mobile_camera,
+  .dcc-svc-pinned .scroll-mobile_trigger,
+  .dcc-svc-pinned .service_sticky-camera { transform: none !important; }
+  /* The arrows page a scrolling container that no longer scrolls, and the hint tells
+     people to drag when dragging is not what moves it. */
+  .dcc-svc-pinned .service-rail_controls { display: none !important; }
+
+  /* Only in the pinned variant. A pinned card has to fit the screen whole, or its button
+     ends up unreachable behind the booking bar, which is the fault that got the original
+     interaction removed. The tallest card is Restorative at eight treatments, and the bar
+     takes about 170px of a phone screen once its buttons wrap, so the card is tightened
+     here: a shallower photograph and less air between the blocks. Nothing is hidden.
+     These are applied before the fit is measured and dropped again if it fails, so a
+     phone that ends up on the swipe rail keeps the roomier card. */
+  .dcc-svc-pinned-pin .service-item_photo {
+    aspect-ratio: auto !important;
+    height: 88px !important;
+  }
+  .dcc-svc-pinned-pin .service_item { gap: 10px !important; }
+  .dcc-svc-pinned-pin .service-item_list { margin-top: 8px !important; gap: 6px 18px !important; }
+  .dcc-svc-pinned-pin .service_item-wrap { padding-bottom: 14px !important; }
+}
