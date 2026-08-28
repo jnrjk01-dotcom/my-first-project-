@@ -9820,3 +9820,10 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
   .dcc-team-profile { grid-template-columns: minmax(0, 1fr); }
   .dcc-team-profile .team_list { max-width: 400px; }
 }
+
+/* --- why choose us: clinic signage --- */
+/* Webflow baked scale3d(1.5,1.5,1) onto this image as the start of a zoom-out reveal.
+   The exported interaction never applies it, and the reveal engine does not adopt the
+   element because its inline style has no opacity:0 to match on, so it stayed at 1.5x
+   with a third of the picture cropped off. The sign has to be readable whole. */
+.home-value_image { transform: none !important; }
