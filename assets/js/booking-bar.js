@@ -24,12 +24,15 @@
     })();
 
   var cfg = {
-    // Real clinic numbers. bookUrl below is still a placeholder Calendly link.
     phone: '+263292263687',
     phoneDisplay: '+263 29 226 3687',
     whatsapp: '263778398111', // international format, no +, no spaces
     whatsappText: 'Hi Dental Care Centre, I would like to book an appointment.',
-    bookUrl: 'https://calendly.com/shreyasrajsony11',
+    // Empty means "book over WhatsApp", the same chat the bar's own WhatsApp button
+    // opens. Booking here happens on WhatsApp, so there is no separate scheduling page
+    // to send people to. Set data-book-url on the script tag to point the button at a
+    // real booking system if the practice ever adopts one.
+    bookUrl: '',
     label: 'Give us a call to schedule an appointment',
     cta: 'Book Appointment',
   };
@@ -137,7 +140,7 @@
     phoneIcon + '<span>Call ' + cfg.phoneDisplay + '</span></a>' +
     '<a class="dcc-bookbar__wa" href="' + waHref + '" target="_blank" rel="noopener noreferrer">' +
     waIcon + '<span>WhatsApp</span><span class="dcc-sr">, opens WhatsApp in a new tab</span></a>' +
-    '<a class="dcc-bookbar__cta" href="' + cfg.bookUrl + '" target="_blank" rel="noopener noreferrer">' +
+    '<a class="dcc-bookbar__cta" href="' + (cfg.bookUrl || waHref) + '" target="_blank" rel="noopener noreferrer">' +
     cfg.cta + '</a>' +
     '</div></div>' +
     '<button type="button" class="dcc-bookbar__close" aria-label="Close the booking bar">' +
