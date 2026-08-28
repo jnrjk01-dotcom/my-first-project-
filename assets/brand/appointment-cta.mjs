@@ -1,5 +1,5 @@
 /**
- * Point the appointment buttons at the clinic's WhatsApp instead of Calendly.
+ * Point the call-to-action buttons at the clinic instead of at Calendly.
  *
  *   node assets/brand/appointment-cta.mjs
  *
@@ -9,14 +9,16 @@
  * same chat with the same prefilled message. Reusing the exact URL already in the markup
  * keeps one booking destination rather than two that can drift apart.
  *
- * WHICH BUTTONS. Only the ones whose label actually asks for an appointment, listed in
- * LABELS below. The match is on the button's visible text rather than on its position or
- * its Webflow variant class, because the same variant is used for buttons that mean
- * different things: "Make A Call" belongs on a tel: link and "Get Started" is not
- * necessarily a booking action, so both are deliberately left alone and reported at the
- * end for a decision.
+ * WHICH BUTTONS. Only the labels listed in TARGETS below, and each goes where its own
+ * wording promises: the appointment buttons open the booking chat, and "Make A Call"
+ * dials the clinic rather than opening a scheduling page. The match is on the button's
+ * visible text rather than on its position or its Webflow variant class, because the
+ * same variant is used for buttons that mean different things.
  *
- * The script is idempotent: a button already pointing at the WhatsApp URL is skipped, so
+ * Anything else still on Calendly is left alone and listed at the end for a decision.
+ * "Get Started" is the remaining case: it is not specific enough to route on its own.
+ *
+ * The script is idempotent: a button already pointing at its destination is skipped, so
  * re-running changes nothing.
  */
 
@@ -26,13 +28,25 @@ import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-/** Visible button text, lowercased, that should open the booking chat. */
-const LABELS = new Set(['get appointment', 'book appointment', 'book an appointment']);
-
 /** The booking chat, taken verbatim from the navbar link already in the pages. */
 const WA =
   'https://wa.me/263778398111?text=Hi%20Dental%20Care%20Centre%2C' +
   '%20I%20would%20like%20to%20book%20an%20appointment.';
+
+/** The clinic line, matching the booking bar and the footer. */
+const TEL = 'tel:+263292263687';
+
+/**
+ * Visible button text, lowercased, mapped to where it should go. A button that asks to
+ * call belongs on the phone line, not on a booking page: "Make A Call" opening a
+ * scheduling link is the kind of mismatch a visitor reads as a broken site.
+ */
+const TARGETS = new Map([
+  ['get appointment', WA],
+  ['book appointment', WA],
+  ['book an appointment', WA],
+  ['make a call', TEL],
+]);
 
 const OLD = /^https:\/\/calendly\.com\//;
 
@@ -70,7 +84,7 @@ for (const rel of pages()) {
 
   let s = '';
   let i = 0;
-  let hits = 0;
+  const hits = [];
   // Walk the anchors rather than regex-replacing every calendly href at once: the
   // decision depends on the anchor's inner text, which a single-pass href replace
   // cannot see.
@@ -81,17 +95,18 @@ for (const rel of pages()) {
     if (end === -1) continue;
     const label = text(original.slice(m.index + m[0].length, end)).toLowerCase();
     if (!OLD.test(m[1])) continue;
-    if (!LABELS.has(label)) {
+    const to = TARGETS.get(label);
+    if (!to) {
       skipped.push(`${rel}: "${label}"`);
       continue;
     }
-    s += original.slice(i, m.index) + m[0].replace(`href="${m[1]}"`, `href="${WA}"`);
+    s += original.slice(i, m.index) + m[0].replace(`href="${m[1]}"`, `href="${to}"`);
     i = m.index + m[0].length;
-    hits += 1;
+    hits.push(`${label} -> ${to.startsWith('tel:') ? 'the clinic line' : 'WhatsApp'}`);
   }
   s += original.slice(i);
 
-  if (!hits) continue;
+  if (!hits.length) continue;
 
   const after = counts(s);
   if (
@@ -109,14 +124,14 @@ for (const rel of pages()) {
 
   writeFileSync(file, s);
   changed += 1;
-  retargeted += hits;
-  console.log(`  ${rel.padEnd(26)} ${hits} button(s) -> WhatsApp`);
+  retargeted += hits.length;
+  console.log(`  ${rel.padEnd(26)} ${hits.join(', ')}`);
 }
 
-if (!changed) console.log('  every appointment button already points at WhatsApp');
+if (!changed) console.log('  every button already points where it should');
 console.log(`\n${retargeted} button(s) on ${changed} page(s)`);
 
 if (skipped.length) {
-  console.log('\nStill on Calendly, left alone because the label is not a booking action:');
+  console.log('\nStill on Calendly, left alone because the label has no declared destination:');
   for (const s of [...new Set(skipped)]) console.log(`  ${s}`);
 }
