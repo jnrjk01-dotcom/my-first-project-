@@ -1,1 +1,5 @@
-node_modules/
+# No trailing slash: this is sometimes a real directory and sometimes a symlink
+# into a scratch directory (so a headless browser can resolve playwright without
+# installing into the repo). A "node_modules/" pattern matches only the directory
+# form, and git treats the symlink as a file, so it would show up as untracked.
+node_modules
