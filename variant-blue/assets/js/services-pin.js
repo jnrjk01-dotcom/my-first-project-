@@ -142,6 +142,16 @@
       // before the cards begin to move.
       ScrollTrigger.refresh();
 
+      // Sora is loaded with font-display: swap, so the page can be laid out in a fallback
+      // face and reflow when the real one arrives. Every card gets taller at that moment,
+      // which moves the start of the pin: measured before the swap, the section pins tens
+      // of pixels lower than intended and its last rows end up behind the booking bar.
+      // Waiting for the fonts to settle and measuring again costs nothing when they were
+      // already loaded, since the promise is resolved by then.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () { ScrollTrigger.refresh(); });
+      }
+
       // Runs when the media query stops matching, so rotating to landscape or resizing
       // into tablet width hands the section back to the swipe rail cleanly.
       return function () {

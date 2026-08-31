@@ -93,14 +93,29 @@
     '.dcc-bookbar a:focus-visible,.dcc-bookbar__close:focus-visible{' +
     'outline:3px solid #7fc2f0;outline-offset:2px}' +
 
-    /* Stacked under 768px: the label reads first, the two booking routes sit side by
-       side, and the primary CTA spans the width. */
+    /* One row under 768px. Stacked, this bar was 194px tall on a 390px screen once the
+       label wrapped and the buttons went to two rows: roughly a quarter of the phone
+       held permanently by a bar, on every page. A single row is about 66px.
+
+       The label goes. It said "give us a call to schedule an appointment" above a button
+       reading "Call +263 29 226 3687", so it was telling people what the button under it
+       already said. Call and WhatsApp keep their icons only, and their text is moved out
+       of sight rather than removed, so the links still announce themselves properly to a
+       screen reader and still carry an accessible name. Book Appointment keeps its words
+       and takes the rest of the row, since it is the one action worth reading. */
     '@media (max-width:767px){' +
-    '.dcc-bookbar__inner{padding:14px 14px 16px;gap:10px;flex-direction:column;align-items:stretch}' +
-    '.dcc-bookbar__label{text-align:center;font-size:12.5px;min-width:0;padding-right:34px}' +
-    '.dcc-bookbar__actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}' +
-    '.dcc-bookbar a{justify-content:center;padding:12px 10px;font-size:13.5px}' +
-    '.dcc-bookbar__cta{grid-column:1/-1}}' +
+    '.dcc-bookbar__inner{padding:10px 44px 10px 12px;gap:8px;' +
+    'flex-direction:row;align-items:center;flex-wrap:nowrap}' +
+    '.dcc-bookbar__label{display:none}' +
+    '.dcc-bookbar__actions{flex:1 1 auto;display:flex;flex-wrap:nowrap;gap:8px;min-width:0}' +
+    '.dcc-bookbar a{justify-content:center;padding:12px 10px;font-size:14px}' +
+    '.dcc-bookbar__call,.dcc-bookbar__wa{flex:0 0 auto;width:48px;padding:12px 0;gap:0}' +
+    '.dcc-bookbar__call>span:not(.dcc-sr),.dcc-bookbar__wa>span:not(.dcc-sr){' +
+    'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;' +
+    'clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}' +
+    '.dcc-bookbar__cta{flex:1 1 auto;min-width:0}' +
+    '.dcc-bookbar__close{top:50%;bottom:auto;transform:translateY(-50%);' +
+    'right:8px;width:30px;height:30px}}' +
 
     '@media (prefers-reduced-motion:reduce){' +
     '.dcc-bookbar{transition:none;transform:translateY(0)}}' +

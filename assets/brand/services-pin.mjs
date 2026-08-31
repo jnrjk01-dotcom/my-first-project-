@@ -57,14 +57,17 @@ ${CSS_MARKER}
 
   /* Only in the pinned variant. A pinned card has to fit the screen whole, or its button
      ends up unreachable behind the booking bar, which is the fault that got the original
-     interaction removed. The tallest card is Restorative at eight treatments, and the bar
-     takes about 170px of a phone screen once its buttons wrap, so the card is tightened
-     here: a shallower photograph and less air between the blocks. Nothing is hidden.
-     These are applied before the fit is measured and dropped again if it fails, so a
-     phone that ends up on the swipe rail keeps the roomier card. */
+     interaction removed. The tallest card is Restorative at eight treatments, so the card
+     is tightened here: a shallower photograph and less air between the blocks. Nothing is
+     hidden. These are applied before the fit is measured and dropped again if it fails,
+     so a phone that ends up on the swipe rail keeps the roomier card.
+
+     Sizes here were set against the real Sora webfont. Measuring with a fallback face
+     makes every text block shorter and the rail looks 20-40px smaller than it is, which
+     is how this first shipped passing a fit check that a real phone then failed. */
   .dcc-svc-pinned-pin .service-item_photo {
     aspect-ratio: auto !important;
-    height: 88px !important;
+    height: 68px !important;
   }
   .dcc-svc-pinned-pin .service_item { gap: 10px !important; }
   .dcc-svc-pinned-pin .service-item_list { margin-top: 8px !important; gap: 6px 18px !important; }
