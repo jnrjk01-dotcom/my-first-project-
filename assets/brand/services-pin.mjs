@@ -82,13 +82,41 @@ ${CSS_MARKER}
      Sizes here were set against the real Sora webfont. Measuring with a fallback face
      makes every text block shorter and the rail looks 20-40px smaller than it is, which
      is how this first shipped passing a fit check that a real phone then failed. */
-  .dcc-svc-pinned-pin .service-item_photo {
-    aspect-ratio: auto !important;
-    height: 68px !important;
+  /* All four cards the same height, with the photograph shown whole and sitting on the
+     same line across the row.
+
+     The treatment lists are what made the heights so uneven: one treatment on
+     orthodontics against eight on restorative, and the phone stylesheet puts them in a
+     single column, so one card ran eight rows deep and another ran one. Two columns
+     while locked halves the tallest without hiding a single treatment. */
+  .dcc-svc-pinned-pin .service-item_list {
+    grid-template-columns: 1fr 1fr !important;
+    margin-top: 8px !important;
+    gap: 6px 14px !important;
   }
-  .dcc-svc-pinned-pin .service_item { gap: 10px !important; }
-  .dcc-svc-pinned-pin .service-item_list { margin-top: 8px !important; gap: 6px 18px !important; }
-  .dcc-svc-pinned-pin .service_item-wrap { padding-bottom: 14px !important; }
+  /* Stretch, so every card takes the height of the tallest rather than its own. */
+  .dcc-svc-pinned-pin .service_list { align-items: stretch !important; }
+  /* Air comes out of the gaps rather than out of the content. Showing the photograph
+     whole costs 190px of a card, so the padding and the three stacked gaps inside it are
+     tightened to pay for it; nothing is hidden or shrunk to do so. */
+  .dcc-svc-pinned-pin .service_item-wrap { padding-bottom: 8px !important; }
+  .dcc-svc-pinned-pin .service_item {
+    height: 100% !important;
+    gap: 10px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  .dcc-svc-pinned-pin .service_content { gap: 10px !important; }
+  .dcc-svc-pinned-pin .service-item_content { gap: 12px !important; }
+  /* Pushes the photograph to the bottom of whatever height the card ends up with, so the
+     four photographs line up instead of floating at four different heights. */
+  .dcc-svc-pinned-pin .service-item_showcase { margin-top: auto !important; }
+  /* 16:10 is the shape three of the four photographs already are, so they are shown
+     complete rather than cropped to a strip. */
+  .dcc-svc-pinned-pin .service-item_photo {
+    aspect-ratio: 16 / 10 !important;
+    height: auto !important;
+  }
 }
 `;
 
