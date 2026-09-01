@@ -9848,11 +9848,28 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
 
   /* Webflow left translate(0, 40px) on the camera as the opening state of an interaction
      the export never runs, the same kind of stranded start-state as the about page hero.
-     It offsets the section for no reason, and a transformed ancestor is also what stops
-     a pinned child from holding still, so it goes. */
+     It offsets the section for no reason, and a transform on a sticky element's ancestor
+     also interferes with how it sticks, so it goes. */
   .dcc-svc-pinned .scroll-mobile_camera,
   .dcc-svc-pinned .scroll-mobile_trigger,
   .dcc-svc-pinned .service_sticky-camera { transform: none !important; }
+
+  /* The section holds still the way the original template did it: the camera sticks, and
+     the trigger above is a tall spacer for it to stick through. The spacer's height is
+     set by the script, since it depends on how far the cards have to travel.
+
+     Sticky rather than a GSAP pin so the sideways travel can begin while the section is
+     still rising and the lock can happen underneath it. A pin cannot do that: it owns
+     both the lock and the animation's range, so nothing moves until it engages. */
+  .dcc-svc-pinned .scroll-mobile_trigger {
+    height: auto;
+    padding-bottom: 0 !important;
+    position: relative;
+  }
+  .dcc-svc-pinned .scroll-mobile_camera {
+    position: sticky !important;
+    top: 16px !important;
+  }
   /* The arrows page a scrolling container that no longer scrolls, and the hint tells
      people to drag when dragging is not what moves it. */
   .dcc-svc-pinned .service-rail_controls { display: none !important; }
