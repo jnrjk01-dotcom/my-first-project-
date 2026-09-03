@@ -9949,3 +9949,79 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
     pointer-events: none;
   }
 }
+
+/* --- footer: map and developer credit --- */
+/* The footer grid was two columns, the info block and the link columns, and the right of
+   it has been half empty since Legal and Follow us were removed. The map takes that space
+   back. On a phone the three stack. */
+.footer_element:has(.footer_map) {
+  grid-template-columns: 1fr 0.8fr 1.1fr;
+  align-items: start;
+}
+.footer_map { min-width: 0; }
+.footer-map_label {
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+.footer-map_address {
+  font-style: normal;
+  line-height: 1.55;
+  margin: 0 0 14px;
+}
+/* A fixed shape so the footer does not jump when the map finishes loading, and so the
+   space is reserved even if the embed never loads at all. */
+.footer-map_frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .14);
+}
+.footer-map_iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.footer-map_link {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The developer credit. No href yet, so the cursor and the hover are what say it is
+   pressable; add an href and it becomes a real link with this styling already on it.
+   The colours are forced AND scoped under .section_footer, because the footer paints
+   every link #cdd8da with !important and turns them white on hover. !important alone
+   loses that fight: ".section_footer a" is one class plus one type, which out-specifies a
+   bare ".footer-credit_link", so both being important the footer's rule still won and the
+   hover was a barely visible pale-grey-to-white shift instead of reading as a control. */
+.section_footer .footer-credit_link {
+  color: #ffffff !important;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, .45);
+  cursor: pointer;
+  transition: color .18s ease, text-decoration-color .18s ease;
+}
+.section_footer .footer-credit_link:hover,
+.section_footer .footer-credit_link:focus-visible {
+  color: var(--primitive-color--primary-500, #24a3b1) !important;
+  text-decoration-color: currentColor;
+}
+.section_footer .footer-credit_link:focus-visible {
+  outline: 2px solid var(--primitive-color--primary-500, #24a3b1);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 991px) {
+  .footer_element:has(.footer_map) { grid-template-columns: 1fr; }
+  .footer-map_frame { aspect-ratio: 16 / 10; }
+}
