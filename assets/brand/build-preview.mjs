@@ -151,6 +151,25 @@ body = body.replace(/(\s(?:src|data-src)=")([^"]+)(")/g, (m, a, u, c) => {
     : m;
 });
 
+/* Assets named from inside inline scripts. The attribute rewrite above only sees
+   src="..." in the markup, but the hero cycler builds its extra photographs at runtime
+   from string literals, so in the bundle those still pointed at paths that do not exist
+   and the two images the carousel rotates to came up blank. These are inlined directly
+   rather than through the lookup table, since the table is keyed off attributes. */
+let scriptAssets = 0;
+body = body
+  .split(/(<script[\s\S]*?<\/script>)/i)
+  .map((chunk, i) => {
+    if (i % 2 === 0) return chunk;
+    return chunk.replace(/(["'])(assets\/img\/[^"']+)\1/g, (m, q, u) => {
+      const uri = dataUri(u);
+      if (!uri) return m;
+      scriptAssets += 1;
+      return `${q}${uri}${q}`;
+    });
+  })
+  .join('');
+
 // CSS url()s already resolved above are left as-is; they are each unique.
 
 const assetJs =
@@ -237,3 +256,4 @@ console.log(`links: ${mapped} mapped, ${inert} neutralised`);
 console.log(`size: ${mb} MB (limit 16 MB)`);
 console.log(`fonts: ${fontFace ? 'Sora inlined' : 'NONE (fallback faces)'}`);
 console.log(`inlined: ${table.size} unique assets (${cache.size} cached), ${libs.length} scripts`);
+console.log(`script-referenced assets inlined: ${scriptAssets}`);
