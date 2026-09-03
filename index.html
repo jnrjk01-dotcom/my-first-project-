@@ -147,7 +147,7 @@
                         <div class="hero_overlay is-gradient"></div>
                     </div>
                     <div data-w-id="e790d2ce-f71a-82ed-935b-8c0db2fa91f1" class="hero-image_wrap">
-                        <img src="assets/img/clinic-operatory.jpg" loading="eager" alt="A treatment room at the practice: dental chair, overhead light and chairside monitor." width="1344" height="752" class="home-hero_image hide-on-mobile hero-carousel-img is-active"/> <img src="assets/img/clinic-dentist-child.jpg" loading="lazy" alt="A dentist from the practice smiling to camera while treating a young patient." width="1344" height="752" class="home-hero_image hide-on-mobile hero-carousel-img"/> <img src="assets/img/clinic-treatment.jpg" loading="lazy" alt="Close-up of a check-up in progress, gloved hands working with a dental mirror and probe." width="1344" height="752" class="home-hero_image hide-on-mobile hero-carousel-img"/>
+                        <img src="assets/img/clinic-operatory.jpg" loading="eager" alt="A treatment room at the practice: dental chair, overhead light and chairside monitor." width="1344" height="752" class="home-hero_image hide-on-mobile hero-carousel-img is-active"/>  
                     </div>
                 </header>
                 
@@ -941,21 +941,7 @@
         
 
     
-        <script>
-            (function(){
-                function startHeroCarousel(){
-                    var imgs=document.querySelectorAll('.hero-carousel-img');
-                    if(imgs.length<2) return;
-                    var i=0;
-                    setInterval(function(){
-                        imgs[i].classList.remove('is-active');
-                        i=(i+1)%imgs.length;
-                        imgs[i].classList.add('is-active');
-                    },5000);
-                }
-                document.readyState!=='loading'?startHeroCarousel():document.addEventListener('DOMContentLoaded',startHeroCarousel);
-            })();
-        </script>
+        <script>(function(){var EXTRA=[["assets/img/clinic-dentist-child.jpg","A dentist from the practice smiling to camera while treating a young patient."],["assets/img/clinic-treatment.jpg","Close-up of a check-up in progress, gloved hands working with a dental mirror and probe."]];function go(){var first=document.querySelector(".hero-carousel-img");if(!first||!first.parentElement)return;if(!window.matchMedia("(min-width: 768px)").matches)return;if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;var wrap=first.parentElement,imgs=[first];EXTRA.forEach(function(d){var im=first.cloneNode(false);im.classList.remove("is-active");im.removeAttribute("data-w-id");im.setAttribute("loading","lazy");im.src=d[0];im.alt=d[1];wrap.appendChild(im);imgs.push(im);});var i=0;setInterval(function(){imgs[i].classList.remove("is-active");i=(i+1)%imgs.length;imgs[i].classList.add("is-active");},5000);}document.readyState!=="loading"?go():document.addEventListener("DOMContentLoaded",go);})();</script>
     
 <script>
 /* Dental Care Centre image guard: any failed/empty image -> on-brand gradient SVG so nothing ever looks broken. */

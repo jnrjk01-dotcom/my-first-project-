@@ -9931,3 +9931,32 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
     height: auto !important;
   }
 }
+
+/* --- hero: single photograph on phones --- */
+@media screen and (max-width: 767px) {
+  /* The Location and Opening Hours strip is opaque and sits over everything below the
+     button, so the lower half of the hero photograph was being cropped to fill space
+     that is covered anyway. Capping the band at the part that is actually visible makes
+     the box far less tall and thin, and roughly doubles how much of the photograph fits:
+     a quarter of its width before, about half now. */
+  .hero-image_wrap { height: 48% !important; }
+  /* 72% pointed the visible strip at the doorway and the monitor on the right of the
+     frame, with the dental chair cropped out. The chair sits near 44% across. */
+  .home-hero_image { object-position: 44% 50% !important; }
+
+  /* A scrim, because re-aiming the crop brought a bright wall and a lit monitor up behind
+     the headline. Measured with the copy hidden and the brightest pixel behind it sampled:
+     white on that pixel was 1.21:1, which is invisible, not merely low. The old crop only
+     escaped this by sitting on a dark doorway. The gradient is heaviest at the top where
+     the headline falls and eases downward, so the room is still clearly readable. */
+  .hero-image_wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(1, 31, 35, .82) 0%,
+      rgba(1, 31, 35, .72) 45%,
+      rgba(1, 31, 35, .45) 100%);
+    pointer-events: none;
+  }
+}
