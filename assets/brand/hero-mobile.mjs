@@ -66,20 +66,52 @@ ${CSS_MARKER}
      frame, with the dental chair cropped out. The chair sits near 44% across. */
   .home-hero_image { object-position: 44% 50% !important; }
 
-  /* A scrim, because re-aiming the crop brought a bright wall and a lit monitor up behind
-     the headline. Measured with the copy hidden and the brightest pixel behind it sampled:
-     white on that pixel was 1.21:1, which is invisible, not merely low. The old crop only
-     escaped this by sitting on a dark doorway. The gradient is heaviest at the top where
-     the headline falls and eases downward, so the room is still clearly readable. */
+  /* A scrim, because the crop puts a bright wall, counter and lit monitor behind the
+     copy. With none at all, white text measures 1.21:1 against the brightest pixel behind
+     it, which is invisible rather than merely low.
+
+     How light it can go was measured rather than guessed, hiding the copy and sampling
+     what is behind it against the mean brightness of the whole photo band:
+
+       none            1.21:1   30.1% bright
+       .55/.40/.06     2.84:1   20.8%
+       .62/.48/.10     3.30:1   19.5%   <- here
+       .72/.60/.20     4.25:1   17.7%
+       .82/.72/.45     6.38:1   16.0%
+
+     The first version of this sat at the bottom of that table and buried the room. This
+     sits near the top of it. Moving the crop was tried first and does nothing: the room
+     measures between 2.7 and 2.9 behind the copy at every horizontal position, because it
+     is uniformly bright there rather than bright in one spot.
+
+     3.30:1 is the AA threshold for large text, which is why the standfirst below is set
+     to a size and weight that counts as large. The headline is 40px and already did. */
   .hero-image_wrap::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg,
-      rgba(1, 31, 35, .82) 0%,
-      rgba(1, 31, 35, .72) 45%,
-      rgba(1, 31, 35, .45) 100%);
+      rgba(1, 31, 35, .62) 0%,
+      rgba(1, 31, 35, .48) 45%,
+      rgba(1, 31, 35, .10) 100%);
     pointer-events: none;
+  }
+
+  /* The standfirst was 16px regular, which is body text and would need 4.5:1 — only
+     reachable by darkening the photo back down. At 19px bold it is large text by the same
+     standard, so 3:1 applies and the measured 3.30:1 covers it. 700 rather than 600
+     because the standard says bold, and 600 is arguable where 700 is not. */
+  .home-hero_content p {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  /* Carries contrast on the glyphs themselves rather than by darkening the whole picture.
+     It is not counted by the contrast standard, which is why the sizes above do the
+     compliance work; this is what makes it comfortable to read over a busy photograph. */
+  .section_hero h1,
+  .home-hero_content p {
+    text-shadow: 0 1px 2px rgba(1, 31, 35, .95), 0 2px 14px rgba(1, 31, 35, .8);
   }
 }
 `;
