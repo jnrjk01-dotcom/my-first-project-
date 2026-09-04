@@ -10068,3 +10068,75 @@ body:has(.w-nav-button.w--open) .dcc-bookbar { display: none; }
     text-shadow: 0 1px 2px rgba(1, 31, 35, .95), 0 2px 14px rgba(1, 31, 35, .8);
   }
 }
+
+/* --- restraint: eyebrows, motion, display type --- */
+/* ── Section eyebrows ─────────────────────────────────────────────────────
+   The pill stays; the sparkle inside it goes. It is the most template-looking mark on
+   the site and it says nothing. A small dot holds the same space quietly. */
+/* Two classes, because the closing call to action uses cta_tag while every other
+   section uses section_tag. Treating only one of them leaves the last thing on the page
+   as the only place the sparkle survives, which is worse than not doing it at all. */
+.section_tag .icon_wrap.is-small > svg,
+.cta_tag .icon_wrap.is-small > svg { display: none; }
+.section_tag .icon_wrap.is-small,
+.cta_tag .icon_wrap.is-small {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .55;
+}
+/* The same sparkle marks each item of the Why Choose Us accordion. There it is not only
+   decorative but misleading: those rows expand, and a sparkle gives no hint of that. A
+   plus is the conventional mark for a row that opens, so the icon box is redrawn as one
+   with two rules. It rotates into a minus when its row is the open one, which is the
+   affordance the template never had. */
+.tabs-accordion_header-icon > svg { display: none; }
+.tabs-accordion_header-icon {
+  position: relative;
+  opacity: .75;
+}
+.tabs-accordion_header-icon::before,
+.tabs-accordion_header-icon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 13px;
+  height: 1.5px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+  transition: transform .25s ease, opacity .25s ease;
+}
+.tabs-accordion_header-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+/* Webflow marks the open tab with w--current. */
+.tabs-accordion_item.w--current .tabs-accordion_header-icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 0;
+}
+
+/* Uppercase and letterspaced, which is how a professional site sets a label above a
+   heading. The size is nudged down because uppercase reads larger than lower case. */
+.section_tag,
+.cta_tag {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Motion is not set here. The reveal engine's travel and duration are numbers inside the
+   inline script on each page, so they are edited there by this script's second half:
+   40px over 0.9s becomes 16px over 0.5s. Sections still arrive; they no longer make an
+   entrance. Noted here so the next person looks in the right place. */
+
+/* ── Display type ─────────────────────────────────────────────────────────
+   Large type set at default tracking looks loose. This is small enough to be invisible
+   as a decision and visible as a result. */
+h1, .heading-style-h1 { letter-spacing: -0.02em; }
+h2, .heading-style-h2 { letter-spacing: -0.015em; }
+
+/* The closing call to action carried two 102px blurred colour blobs behind the copy,
+   a decorative flourish from the template. Softened rather than removed: they still
+   lift the corner, without the page looking like it is glowing at the reader. */
+.cta_overlay { opacity: .45; }

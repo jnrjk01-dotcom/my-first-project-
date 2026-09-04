@@ -412,10 +412,7 @@
                                         <a href="service.html" aria-current="page" class="footer-menu_link w-inline-block w--current">
                                             <div>Services</div>
                                         </a>
-                                        <a href="blog.html" class="footer-menu_link w-inline-block">
-                                            <div>Blogs</div>
-                                        </a>
-                                    </div>
+                                        </div>
                                 </div>
                                 
                                 
@@ -510,9 +507,9 @@
                     els.forEach(function (el) {
                         gsap.set(el, { clearProps: 'transform,filter' });
                         gsap.fromTo(el,
-                            { opacity: 0, y: 40 },
+                            { opacity: 0, y: 16 },
                             {
-                                opacity: 1, y: 0, duration: 0.9, ease: 'power2.out',
+                                opacity: 1, y: 0, duration: 0.5, ease: 'power2.out',
                                 scrollTrigger: hasST ? { trigger: el, start: 'top 97%', once: true } : undefined
                             }
                         );
