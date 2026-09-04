@@ -16,7 +16,8 @@
  * same variant is used for buttons that mean different things.
  *
  * Anything else still on Calendly is left alone and listed at the end for a decision.
- * "Get Started" is the remaining case: it is not specific enough to route on its own.
+ * Nothing is, as it happens: the last one was a text link inside the privacy policy,
+ * repointed by hand because it needed the surrounding sentence rewritten too.
  *
  * The script is idempotent: a button already pointing at its destination is skipped, so
  * re-running changes nothing.
@@ -46,6 +47,11 @@ const TARGETS = new Map([
   ['book appointment', WA],
   ['book an appointment', WA],
   ['make a call', TEL],
+  // "Get Started" was the last thing still pointing at the template's Calendly account,
+  // which belongs to someone unconnected to the practice. In every one of its four
+  // placements it sits under a heading inviting the reader to make contact, so it means
+  // the same as the appointment buttons and now goes to the same place.
+  ['get started', WA],
 ]);
 
 const OLD = /^https:\/\/calendly\.com\//;
