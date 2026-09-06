@@ -26,8 +26,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 /* ── Real contact details ───────────────────────────────────────────────── */
 const PHONE_HREF = '+263292263687';
 const PHONE_DISPLAY = '+263 29 226 3687';
-const WA_DIGITS = '263778398111';
-const WA_DISPLAY = '+263 77 839 8111';
+const WA_DIGITS = '263777804093';
+const WA_DISPLAY = '+263 77 780 4093';
 
 const ADDRESS_LINES = ['Cnr Fife Street &amp; 14th Avenue', 'Sunninghill Building, Suite Four', 'Bulawayo, Zimbabwe'];
 const MAPS = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(

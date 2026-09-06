@@ -31,7 +31,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 /** The booking chat, taken verbatim from the navbar link already in the pages. */
 const WA =
-  'https://wa.me/263778398111?text=Hi%20Dental%20Care%20Centre%2C' +
+  'https://wa.me/263777804093?text=Hi%20Dental%20Care%20Centre%2C' +
   '%20I%20would%20like%20to%20book%20an%20appointment.';
 
 /** The clinic line, matching the booking bar and the footer. */

@@ -26,7 +26,7 @@
   var cfg = {
     phone: '+263292263687',
     phoneDisplay: '+263 29 226 3687',
-    whatsapp: '263778398111', // international format, no +, no spaces
+    whatsapp: '263777804093', // international format, no +, no spaces
     whatsappText: 'Hi Dental Care Centre, I would like to book an appointment.',
     // Empty means "book over WhatsApp", the same chat the bar's own WhatsApp button
     // opens. Booking here happens on WhatsApp, so there is no separate scheduling page

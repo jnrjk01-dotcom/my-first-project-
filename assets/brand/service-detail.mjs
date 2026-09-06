@@ -58,7 +58,7 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
 const PHONE_HREF = '+263292263687';
 const PHONE_DISPLAY = '+263 29 226 3687';
-const WA_DIGITS = '263778398111';
+const WA_DIGITS = '263777804093';
 
 /* ── Content ─────────────────────────────────────────────────────────────────
    Treatment `slug`s must stay stable: the Services dropdown and the home page cards
