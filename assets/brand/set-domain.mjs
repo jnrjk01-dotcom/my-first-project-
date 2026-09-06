@@ -90,12 +90,14 @@ for (const [page, path] of Object.entries(PAGES)) {
     (m, rel, attr) => `<meta content="${origin}/${rel}" ${attr}/>`
   );
 
-  /* The Dentist record should say where the practice's own page is. */
+  /* The Dentist record should say where the practice's own page is. Clear any previous
+     value before inserting: adding first and de-duplicating afterwards kept whichever line
+     the pattern happened to reach first, which on a second run was the old domain. */
+  h = h.replace(/\n\s*"url": "https?:\/\/[^"]*",(?=\n\s*")/g, '');
   h = h.replace(
     /("@type": "Dentist",\n\s*"name": "[^"]*",)/,
     `$1\n  "url": "${origin}/",`
   );
-  h = h.replace(/\n\s*"url": "https?:\/\/[^"]*",(\n\s*"url": ")/, '$1');
 
   if (h !== before) {
     writeFileSync(p, h);
